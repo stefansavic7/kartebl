@@ -28,3 +28,32 @@ export default {
 git init
 echo "node_modules/" >> frontend/.gitignore
 echo "target/" >> backend/.gitignore
+
+
+
+
+ZA GIT:
+
+git clone https://github.com/stefansavic7/kartebl.git
+cd kartebl
+git branch
+
+
+da bi lokalno imali sve promjene sa maina morate:
+git checkout main (ako niste na mainu)
+git pull origin main
+
+zatim:
+
+odvojite se na novu granu iz grane main:
+git checkout -b ime-nove-grane
+
+radite na projektu, zatim:
+
+komanda "git add ."  dodaje sve promjene
+komanda "git commit -m "Objasnjenje promjene ukratko"" kreira komit sa opisom izmjena
+
+komanda "git push origin ime-vase-grane"
+
+zatim odete na github, vidjecete obavjestenje o pushu. Kliknete na Compare & pull request.
+Dodajte neki opis i kliknite Create pull request
