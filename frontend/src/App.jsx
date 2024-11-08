@@ -8,8 +8,36 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Tickets from "./pages/Tickets";
 import Layout from "./components/Layout";
+import axios from 'axios'
+import { useEffect, useState } from "react";
+
 
 const App = () => {
+
+
+  const [data, setData] = useState([])
+  useEffect(()=>{
+    axios.get("http://localhost:9000/dogadjaji").then((res)=>{
+      setData(res.data)
+    })
+  }, [])
+
+  useEffect(()=>{
+    console.log(data);
+    
+  }, [data])
+
+  data.forEach(item=>{
+    console.log(item.naziv)
+  })
+
+
+  // const data = fetch("http://localhost:9000/dogadjaji")
+  // .then((res)=>res.json)
+  // .then((data)=>data)
+  // console.log(data)
+
+
   return (
     <BrowserRouter>
       <Routes>

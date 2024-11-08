@@ -11,6 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -19,18 +23,7 @@ public class ProjectSecurityConfiguration {
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(new CorsConfigurationSource() {// ovim rjesavamo cors (cross origin) problem, tj problem izmedju komunikacije front i bek aplikacije
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowCredentials(true);
-                        config.addAllowedOrigin("http://localhost:9000");
-                        config.addAllowedHeader("*");
-                        config.addAllowedMethod("*");
-                        config.setMaxAge(3600L);
-                        return config;
-                    }
-                }).and().
+        http.cors().disable().
                 csrf().disable().authorizeHttpRequests((requests) -> requests
                         .requestMatchers("myLoans").hasRole("USER")//ovo su roles and authorities, dva koncepta za dozvolu pristupa razlicitim grupama korisnika
                         .requestMatchers("/users").authenticated()
@@ -39,10 +32,23 @@ public class ProjectSecurityConfiguration {
         http.httpBasic(withDefaults());
         return http.build();
     }
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
+
