@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Input({ fieldType, size = '20rem' }) {
+export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='' }) {
   const renderTextField = () => {
     const dynamicStyles = {
       width: size,
@@ -46,8 +46,8 @@ export default function Input({ fieldType, size = '20rem' }) {
               <TextField
                 required
                 id="outlined-required"
-                label="Required"
-                defaultValue="Hello World"
+                label={labelText}
+                defaultValue={defaultValue}
                 sx={dynamicStyles}
               />
             );
@@ -56,8 +56,8 @@ export default function Input({ fieldType, size = '20rem' }) {
               <TextField
                 disabled
                 id="outlined-disabled"
-                label="Disabled"
-                defaultValue="Hello World"
+                label={labelText}
+                defaultValue={defaultValue}
                 sx={dynamicStyles}
               />
             );
@@ -65,7 +65,7 @@ export default function Input({ fieldType, size = '20rem' }) {
             return (
             <TextField
                 id="outlined-password-input"
-                label="Password"
+                label={labelText}
                 type="password"
                 autoComplete="current-password"
                 sx={dynamicStyles}
@@ -75,7 +75,7 @@ export default function Input({ fieldType, size = '20rem' }) {
             return (
             <TextField
                 id="outlined-number"
-                label="Number"
+                label={labelText}
                 type="number"
                 sx={dynamicStyles}
             />
@@ -84,9 +84,9 @@ export default function Input({ fieldType, size = '20rem' }) {
             return (
             <TextField
                 id="outlined-helperText"
-                label="Helper text"
-                defaultValue="Default Value"
-                helperText="Some important text"
+                label={labelText}
+                defaultValue={defaultValue}
+                helperText={helperText}
                 sx={dynamicStyles}
             />
             );
