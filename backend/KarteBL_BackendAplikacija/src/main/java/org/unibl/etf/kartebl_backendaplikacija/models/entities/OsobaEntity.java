@@ -3,16 +3,15 @@ package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "osoba")
-public class OsobaEntity {
+public class OsobaEntity implements BaseEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,16 +32,24 @@ public class OsobaEntity {
     @Column(name = "mail", nullable = false, length = 100)
     private String mail;
 
-    @OneToMany(mappedBy = "korisnickoIme", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "osoba", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<AdministratorEntity> administrators = new LinkedHashSet<>();
+    private List<AdministratorEntity> administrators;
 
     @OneToMany(mappedBy = "korisnickoIme", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<KorisnikEntity> korisniks = new LinkedHashSet<>();
+    private List<KorisnikEntity> korisniks;
 
-    @OneToMany(mappedBy = "korisnickoIme", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "osoba", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<OrganizatorEntity> organizators = new LinkedHashSet<>();
+    private List<OrganizatorEntity> organizators;
 
+    @OneToMany(mappedBy = "osoba", fetch = FetchType.EAGER)
+    @JsonIgnore
+    List<AuthorityEntity> authorities;
+
+    @Override
+    public void setId(Integer integer) {
+        this.id = integer;
+    }
 }
