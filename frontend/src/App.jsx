@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Tickets from "./pages/Tickets";
 import Layout from "./components/Layout";
+import Profile from "./pages/Profile";
 import axios from 'axios'
 import { useEffect, useState } from "react";
 
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="kontakt" element={<Contact />} />
           <Route path="karte" element={<Tickets />} />
           <Route path="info" element={<About />} />
+          <Route path="profil" element={<Profile />} />
           <Route path="*" element={<div>ERROR 404</div>} />
         </Route>
       </Routes>
