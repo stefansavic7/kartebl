@@ -2,7 +2,7 @@ package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
 import java.util.List;
@@ -10,27 +10,38 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "administrator")
-public class AdministratorEntity implements BaseEntity<Integer> {
-    @Id
+public class AdministratorEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
+    @Basic
+    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    private String korisnickoIme;
+    @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
     private String jmbg;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime", nullable = false, referencedColumnName = "korisnicko_ime")
+    @Basic
+    @Column(name = "sifra", nullable = false, length = 300)
+    private String sifra;
+    @Basic
+    @Column(name = "ime", nullable = false, length = 50)
+    private String ime;
+    @Basic
+    @Column(name = "prezime", nullable = false, length = 50)
+    private String prezime;
+    @Basic
+    @Column(name = "email", nullable = true, length = 60)
+    private String email;
+    @OneToMany(mappedBy = "administrator")
     @JsonIgnore
-    private OsobaEntity osoba;
-
-
-    @OneToMany(mappedBy = "korisnickoImeAdministrator", fetch = FetchType.LAZY)
+    private List<AuthoritiesEntity> authorities;
+    @OneToMany(mappedBy = "administrator")
     @JsonIgnore
     private List<DogadjajEntity> dogadjaji;
-
-    @OneToMany(mappedBy = "korisnickoImeAdministrator", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "administrator")
     @JsonIgnore
     private List<OrganizatorEntity> organizatori;
-
+    
 }

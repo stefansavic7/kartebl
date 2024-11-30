@@ -184,11 +184,11 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `kartebl_baza`.`skeniranakarta`
+-- Table `kartebl_baza`.`skenirana_karta`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `kartebl_baza`.`skeniranakarta` ;
+DROP TABLE IF EXISTS `kartebl_baza`.`skenirana_karta` ;
 
-CREATE TABLE IF NOT EXISTS `kartebl_baza`.`skeniranakarta` (
+CREATE TABLE IF NOT EXISTS `kartebl_baza`.`skenirana_karta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `vrijeme_skeniranja` TIME NOT NULL,
   PRIMARY KEY (`id`))
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `kartebl_baza`.`transakcija` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_transakcija_skeniranakarta1`
     FOREIGN KEY (`skeniranakarta_id`)
-    REFERENCES `kartebl_baza`.`skeniranakarta` (`id`)
+    REFERENCES `kartebl_baza`.`skenirana_karta` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

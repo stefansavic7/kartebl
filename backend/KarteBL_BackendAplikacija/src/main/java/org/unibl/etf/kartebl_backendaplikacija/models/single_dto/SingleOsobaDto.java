@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.OsobaDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.AuthorityEntity;
+import org.unibl.etf.kartebl_backendaplikacija.models.entities.AuthoritiesEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.KorisnikEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.OrganizatorEntity;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class SingleOsobaDto extends OsobaDto {
 
-    List<AuthorityEntity> authorities;
+    List<AuthoritiesEntity> authorities;
     private List<AdministratorEntity> administrators;
     private List<KorisnikEntity> korisniks;
     private List<OrganizatorEntity> organizators;

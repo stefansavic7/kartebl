@@ -1,35 +1,26 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "transakcija")
-public class TransakcijaEntity {
-    @Id
+public class TransakcijaEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_karta", nullable = false)
-    @JsonIgnore
-    private KartaEntity idKarta;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime_korisnik", nullable = false, referencedColumnName = "korisnicko_ime")
-    @JsonIgnore
-    private KorisnikEntity korisnickoImeKorisnik;
-
-    @OneToMany(mappedBy = "idTransakcija", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<SkeniranaKartaEntity> skeniranakartas = new LinkedHashSet<>();
-
+    @ManyToOne
+    @JoinColumn(name = "korisnik_id", referencedColumnName = "id", nullable = false)
+    private KorisnikEntity korisnik;
+    @ManyToOne
+    @JoinColumn(name = "karta_id", referencedColumnName = "id", nullable = false)
+    private KartaEntity karta;
+    @OneToOne
+    @JoinColumn(name = "skeniranakarta_id", referencedColumnName = "id")
+    private SkeniranaKartaEntity skeniranakarta;
+    
 }
