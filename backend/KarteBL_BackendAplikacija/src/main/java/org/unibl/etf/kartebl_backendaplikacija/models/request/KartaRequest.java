@@ -11,8 +11,8 @@ public class KartaRequest {
 
     private byte[] qr;
 
-    int idOrganizatora;
+    int organizatorId;
 
-    int idDogadjaja;
+    int dogadjajId;
 
 }
