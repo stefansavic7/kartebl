@@ -4,5 +4,19 @@ import lombok.Data;
 
 @Data
 public class AdministratorRequest {
+
+    private Integer id;
+
+    private String korisnickoIme;
+
     private String jmbg;
+
+    private String sifra;
+
+    private String ime;
+
+    private String prezime;
+
+    private String email;
+
 }
