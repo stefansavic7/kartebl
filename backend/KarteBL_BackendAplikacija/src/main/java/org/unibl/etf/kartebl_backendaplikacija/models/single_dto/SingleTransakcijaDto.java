@@ -1,5 +1,9 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.single_dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.KartaEntity;
@@ -13,10 +17,7 @@ import java.util.List;
 public class SingleTransakcijaDto
 {
     private Integer id;
-    
-    private KartaEntity idKarta;
-    
-    private KorisnikEntity korisnickoImeKorisnik;
-    
-    private List<SkeniranaKartaEntity> skeniranakartas = new ArrayList<>();
+    private KorisnikEntity korisnik;
+    private KartaEntity karta;
+    private SkeniranaKartaEntity skeniranaKarta;
 }
