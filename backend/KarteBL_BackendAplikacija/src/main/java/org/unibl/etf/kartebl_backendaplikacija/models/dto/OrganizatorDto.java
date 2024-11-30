@@ -5,7 +5,14 @@ import lombok.Data;
 @Data
 public class OrganizatorDto {
 
+
+    String sifra;
+
     private Integer id;
+
+    private String korisnickoIme;
+
+    private String email;
 
     private String jmbg;
 

@@ -4,20 +4,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.AdministratorDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.AuthorityDto;
-import org.unibl.etf.kartebl_backendaplikacija.models.dto.DogadjajDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.OrganizatorDto;
 
-import java.util.List;
-
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SingleAdministratorDto extends AdministratorDto {
+@EqualsAndHashCode(callSuper=true)
+public class SingleAuthorityDto extends AuthorityDto {
+
+    private AdministratorDto administrator;
 
 
-    private List<AuthorityDto> authorities;
-
-    private List<DogadjajDto> dogadjaji;
+    private OrganizatorDto organizator;
 
 
-    private List<OrganizatorDto> organizatori;
+    //private KorisnikDto korisnik; TODO
 }

@@ -20,4 +20,8 @@ public class DogadjajRequest {
     private String opis;
 
     private byte[] slika;
+
+    private String korisnickoImeOrganizator;
+
+    private String korisnickoImeAdministrator;
 }

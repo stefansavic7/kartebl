@@ -1,18 +1,17 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.single_dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.unibl.etf.kartebl_backendaplikacija.models.dto.AdministratorDto;
+import org.unibl.etf.kartebl_backendaplikacija.models.dto.DogadjajDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.OrganizatorDto;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.DogadjajEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.OsobaEntity;
 
 import java.util.List;
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class SingleOrganizatorDto extends OrganizatorDto {
 
-    private AdministratorEntity administrator;
+    private AdministratorDto administrator;
 
-    private OsobaEntity osoba;
-
-    private List<DogadjajEntity> dogadjaji;
+    private List<DogadjajDto> dogadjaji;
 }
