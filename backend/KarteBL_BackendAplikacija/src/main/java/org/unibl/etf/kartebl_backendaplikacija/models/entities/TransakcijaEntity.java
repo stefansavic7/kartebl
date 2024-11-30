@@ -1,5 +1,6 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
@@ -19,8 +20,8 @@ public class TransakcijaEntity implements BaseEntity<Integer>
     @ManyToOne
     @JoinColumn(name = "karta_id", referencedColumnName = "id", nullable = false)
     private KartaEntity karta;
-    @OneToOne
-    @JoinColumn(name = "skeniranakarta_id", referencedColumnName = "id")
-    private SkeniranaKartaEntity skeniranakarta;
+    @OneToOne(mappedBy = "transakcija")
+    @JsonIgnore
+    private SkeniranaKartaEntity skeniranaKarta;
     
 }

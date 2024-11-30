@@ -13,7 +13,6 @@ import org.unibl.etf.kartebl_backendaplikacija.services.TransakcijaService;
 @RequestMapping("/transakcije")
 public class TransakcijaController extends CrudController<Integer, TransakcijaRequest, TransakcijaDto, SingleTransakcijaDto>
 {
-    TransakcijaService transakcijaService;
     public TransakcijaController(TransakcijaService transakcijaService)
     {
         super(transakcijaService, TransakcijaDto.class, SingleTransakcijaDto.class);

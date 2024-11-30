@@ -11,9 +11,6 @@ import org.unibl.etf.kartebl_backendaplikacija.repositories.TransakcijaRepositor
 @Service
 public class TransakcijaServiceImpl extends CrudJpaService<TransakcijaEntity, Integer> implements TransakcijaService
 {
-    private TransakcijaRepository transakcijaRepository;
-    private ModelMapper modelMapper;
-    
     public TransakcijaServiceImpl(TransakcijaRepository transakcijaRepository, ModelMapper modelMapper)
     {
         super(transakcijaRepository, modelMapper, TransakcijaEntity.class);

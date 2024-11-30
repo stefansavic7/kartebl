@@ -1,6 +1,5 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
@@ -19,8 +18,8 @@ public class SkeniranaKartaEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "vrijeme_skeniranja", nullable = false)
     private Time vrijemeSkeniranja;
-    @OneToOne(mappedBy = "skeniranakarta")
-    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "transakcija_id", referencedColumnName = "id")
     private TransakcijaEntity transakcija;
     
 }
