@@ -184,19 +184,6 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `kartebl_baza`.`skenirana_karta`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `kartebl_baza`.`skenirana_karta` ;
-
-CREATE TABLE IF NOT EXISTS `kartebl_baza`.`skenirana_karta` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `vrijeme_skeniranja` TIME NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
 -- Table `kartebl_baza`.`transakcija`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `kartebl_baza`.`transakcija` ;
@@ -205,11 +192,9 @@ CREATE TABLE IF NOT EXISTS `kartebl_baza`.`transakcija` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `korisnik_id` INT NOT NULL,
   `karta_id` INT NOT NULL,
-  `skeniranakarta_id` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_transakcija_korisnik1_idx` (`korisnik_id` ASC) VISIBLE,
   INDEX `fk_transakcija_karta1_idx` (`karta_id` ASC) VISIBLE,
-  INDEX `fk_transakcija_skeniranakarta1_idx` (`skeniranakarta_id` ASC) VISIBLE,
   CONSTRAINT `fk_transakcija_korisnik1`
     FOREIGN KEY (`korisnik_id`)
     REFERENCES `kartebl_baza`.`korisnik` (`id`)
@@ -219,10 +204,25 @@ CREATE TABLE IF NOT EXISTS `kartebl_baza`.`transakcija` (
     FOREIGN KEY (`karta_id`)
     REFERENCES `kartebl_baza`.`karta` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transakcija_skeniranakarta1`
-    FOREIGN KEY (`skeniranakarta_id`)
-    REFERENCES `kartebl_baza`.`skenirana_karta` (`id`)
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `kartebl_baza`.`skenirana_karta`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `kartebl_baza`.`skenirana_karta` ;
+
+CREATE TABLE IF NOT EXISTS `kartebl_baza`.`skenirana_karta` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `vrijeme_skeniranja` TIME NOT NULL,
+  `transakcija_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_skenirana_karta_transakcija1_idx` (`transakcija_id` ASC) VISIBLE,
+  CONSTRAINT `fk_skenirana_karta_transakcija1`
+    FOREIGN KEY (`transakcija_id`)
+    REFERENCES `kartebl_baza`.`transakcija` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
