@@ -35,9 +35,11 @@ const NavBar = () => {
         {/* Language Selector and Login */}
         <div className="flex items-center space-x-4">
           {/* Login Button */}
+          <Link to="/prijava">
           <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition mr-10">
             <i className="fas fa-user"></i> Prijavi se
           </button>
+          </Link>
         </div>
       </div>
     </nav>
