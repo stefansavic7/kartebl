@@ -2,41 +2,43 @@ package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "organizator")
-public class OrganizatorEntity {
-    @Id
+public class OrganizatorEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime", nullable = false, referencedColumnName = "korisnicko_ime")
-    @JsonIgnore
-    private OsobaEntity korisnickoIme;
-
+    @Basic
+    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    private String korisnickoIme;
+    @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
     private String jmbg;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime_administrator", nullable = false, referencedColumnName = "korisnicko_ime")
+    @Basic
+    @Column(name = "sifra", nullable = true, length = 200)
+    private String sifra;
+    @Basic
+    @Column(name = "email", nullable = true, length = 70)
+    private String email;
+    @OneToMany(mappedBy = "organizator")
     @JsonIgnore
-    private AdministratorEntity korisnickoImeAdministrator;
-
-    @OneToMany(mappedBy = "korisnickoImeOrganizator", fetch = FetchType.LAZY)
+    private List<AuthoritiesEntity> authorities;
+    @OneToMany(mappedBy = "organizator")
     @JsonIgnore
-    private Set<DogadjajEntity> dogadjajs = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "korisnickoImeOrganizator", fetch = FetchType.LAZY)
+    private List<DogadjajEntity> dogadjaji;
+    @OneToMany(mappedBy = "organizator")
     @JsonIgnore
-    private Set<KartaEntity> kartas = new LinkedHashSet<>();
-
+    private List<KartaEntity> karte;
+    @ManyToOne
+    @JoinColumn(name = "administrator_id", referencedColumnName = "id", nullable = false)
+    private AdministratorEntity administrator;
+    
 }
