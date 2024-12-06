@@ -29,7 +29,8 @@ public class ProjectSecurityConfiguration {
                         .requestMatchers("/users").authenticated()
 
 
-                        .requestMatchers("/dogadjaji/**", "/transakcije/**", "/osobe/**","/administratori/**", "/organizatori/**", "/karte/**").permitAll());
+                        .requestMatchers("/dogadjaji/**", "/transakcije/**", "/osobe/**","/administratori/**", "/organizatori/**", "/karte/**", "/skeniraneKarte/**").permitAll());
+
 
 
 
