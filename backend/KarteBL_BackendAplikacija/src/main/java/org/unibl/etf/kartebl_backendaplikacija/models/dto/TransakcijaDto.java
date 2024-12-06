@@ -10,8 +10,6 @@ public class TransakcijaDto {
 
     private Integer id;
 
-
     private KartaEntity idKarta;
-
 
 }
