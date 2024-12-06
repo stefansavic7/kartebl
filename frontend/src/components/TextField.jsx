@@ -1,6 +1,7 @@
-const TextField = ({ type, placeholder, value, onChange, className }) => {
+const TextField = ({ type="text", placeholder="", value="", onChange, className="", id="" }) => {
     return (
       <input
+        id={id}
         type={type}
         placeholder={placeholder}
         value={value}
