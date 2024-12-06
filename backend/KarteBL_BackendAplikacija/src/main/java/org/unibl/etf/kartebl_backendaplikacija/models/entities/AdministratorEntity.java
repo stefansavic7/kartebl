@@ -17,7 +17,7 @@ public class AdministratorEntity implements BaseEntity<Integer>
     @Column(name = "id", nullable = false)
     private Integer id;
     @Basic
-    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    @Column(name = "korisnicko_ime", nullable = false, length = 50, unique = true)
     private String korisnickoIme;
     @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
