@@ -28,7 +28,7 @@ public class ProjectSecurityConfiguration {
                         .requestMatchers("myLoans").hasRole("USER")//ovo su roles and authorities, dva koncepta za dozvolu pristupa razlicitim grupama korisnika
                         .requestMatchers("/users").authenticated()
 
-                        .requestMatchers("/dogadjaji/**", "/transakcije/**", "/osobe/**","/administratori/**", "/organizatori/**").permitAll());
+                        .requestMatchers("/dogadjaji/**", "/transakcije/**", "/osobe/**","/administratori/**", "/organizatori/**", "/karte/**").permitAll());
 
         http.formLogin(withDefaults());
         http.httpBasic(withDefaults());

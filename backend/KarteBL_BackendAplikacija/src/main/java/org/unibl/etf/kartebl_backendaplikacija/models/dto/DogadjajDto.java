@@ -29,9 +29,9 @@ public class DogadjajDto {
 
     private byte[] slika;
 
-    private String administratorKorisnickoIme;
+    private String administratorId;
 
-    private String organizatorKorisnickoIme;
+    private String organizatorId;
 
 
 

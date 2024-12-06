@@ -21,7 +21,7 @@ public class DogadjajRequest {
 
     private byte[] slika;
 
-    private String korisnickoImeOrganizator;
+    private String administratorId;
 
-    private String korisnickoImeAdministrator;
+    private String organizatorId;
 }
