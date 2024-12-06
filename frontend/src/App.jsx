@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import axios from 'axios'
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
+import Registration from "./pages/Registration";
 
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="info" element={<About />} />
           <Route path="profil" element={<Profile />} />
           <Route path="prijava" element={<Login />} />
+          <Route path="registracija" element={<Registration />} />
           <Route path="*" element={<div>ERROR 404</div>} />
         </Route>
       </Routes>
