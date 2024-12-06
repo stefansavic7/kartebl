@@ -1,5 +1,7 @@
 package org.unibl.etf.kartebl_backendaplikacija.base;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.Getter;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,8 @@ public class CrudJpaService<E extends BaseEntity<ID>, ID > implements CrudServic
     private final JpaRepository<E, ID> repository;
     private final Class<E> entityClass;
     private final ModelMapper modelMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     public CrudJpaService(JpaRepository<E, ID> repository, ModelMapper modelMapper, Class<E> entityClass) {
@@ -52,6 +56,7 @@ public class CrudJpaService<E extends BaseEntity<ID>, ID > implements CrudServic
         E entity = modelMapper.map(object, entityClass);
         entity.setId(null);
         entity = repository.saveAndFlush(entity);
+        entityManager.refresh(entity);
         return modelMapper.map(entity, resultDtoClass);
     }
 
@@ -62,6 +67,7 @@ public class CrudJpaService<E extends BaseEntity<ID>, ID > implements CrudServic
         E entity = modelMapper.map(object, entityClass);
         entity.setId(id);
         entity = repository.saveAndFlush(entity);
+        entityManager.refresh(entity);
         return modelMapper.map(entity, resultDtoClass);
     }
 
