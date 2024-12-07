@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import { MyProfile } from "../components/MyProfile.jsx";
 
 const Profile = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const divContents = [
-    <div className="p-5">
-      <h2 className="text-2xl font-bold mb-4">Moj Profil</h2>
-      <p className="text-gray-600">Ovo je vaš profil. Ovdje možete vidjeti svoje podatke.</p>
+    <div className="p-5 w-full h-full">
+      {/*<h2 className="text-2xl font-bold mb-4">Moj profil</h2>
+      <p className="text-gray-600">Ovo je vaš profil. Ovdje možete vidjeti svoje podatke.</p> */}
+      <MyProfile></MyProfile>
     </div>,
     <div className="p-5">
       <h2 className="text-2xl font-bold mb-4">Narudžbe</h2>

@@ -1,7 +1,13 @@
+import TextField from "../components/TextField";
 
 const Contact = () => {
   return (
-    <div>Contact</div>
+    <div>
+      Contact
+      
+    </div>
+    
+
   )
 }
 
