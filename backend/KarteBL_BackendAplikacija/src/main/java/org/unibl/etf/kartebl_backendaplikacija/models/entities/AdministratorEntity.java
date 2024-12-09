@@ -1,37 +1,47 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "administrator")
-public class AdministratorEntity {
-    @Id
+public class AdministratorEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime", nullable = false, referencedColumnName = "korisnicko_ime")
-    @JsonIgnore
-    private OsobaEntity korisnickoIme;
-
+    @Basic
+    @Column(name = "korisnicko_ime", nullable = false, length = 50, unique = true)
+    private String korisnickoIme;
+    @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
     private String jmbg;
-
-    @OneToMany(mappedBy = "korisnickoImeAdministrator", fetch = FetchType.LAZY)
+    @Basic
+    @Column(name = "sifra", nullable = false, length = 300)
+    private String sifra;
+    @Basic
+    @Column(name = "ime", nullable = false, length = 50)
+    private String ime;
+    @Basic
+    @Column(name = "prezime", nullable = false, length = 50)
+    private String prezime;
+    @Basic
+    @Column(name = "email", nullable = true, length = 60)
+    private String email;
+    @OneToMany(mappedBy = "administrator")
     @JsonIgnore
-    private Set<DogadjajEntity> dogadjajs = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "korisnickoImeAdministrator", fetch = FetchType.LAZY)
+    private List<AuthoritiesEntity> authorities;
+    @OneToMany(mappedBy = "administrator")
     @JsonIgnore
-    private Set<OrganizatorEntity> organizators = new LinkedHashSet<>();
-
+    private List<DogadjajEntity> dogadjaji;
+    @OneToMany(mappedBy = "administrator")
+    @JsonIgnore
+    private List<OrganizatorEntity> organizatori;
+    
 }

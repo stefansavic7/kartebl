@@ -2,43 +2,39 @@ package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "karta")
-public class KartaEntity {
-    @Id
+public class KartaEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @Column(name = "cijena", nullable = false)
-    private Double cijena;
-
-    @Column(name = "vrsta_karte", length = 50)
-    private String vrstaKarte;
-
-    @Column(name = "qr", nullable = false)
+    @Basic
+    @Column(name = "cijena", nullable = false, precision = 2)
+    private BigDecimal cijena;
+    @Basic
+    @Column(name = "qr", nullable = true)
     private byte[] qr;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_dogadjaj", nullable = false)
+    @Basic
+    @Column(name = "vrsta_karte", nullable = true, length = 100)
+    private String vrstaKarte;
+    @ManyToOne
+    @JoinColumn(name = "dogadjaj_id", referencedColumnName = "id", nullable = false)
+    private DogadjajEntity dogadjaj;
+    @ManyToOne
+    @JoinColumn(name = "organizator_id", referencedColumnName = "id", nullable = false)
+    private OrganizatorEntity organizator;
+    @OneToMany(mappedBy = "karta")
     @JsonIgnore
-    private DogadjajEntity idDogadjaj;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime_organizator", nullable = false, referencedColumnName = "korisnicko_ime")
-    @JsonIgnore
-    private OrganizatorEntity korisnickoImeOrganizator;
-
-    @OneToMany(mappedBy = "idKarta", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<TransakcijaEntity> transakcijas = new LinkedHashSet<>();
-
+    private List<TransakcijaEntity> transakcije;
+    
 }

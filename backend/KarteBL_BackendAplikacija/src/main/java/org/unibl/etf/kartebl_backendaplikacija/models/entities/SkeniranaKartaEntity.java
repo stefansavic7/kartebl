@@ -1,28 +1,25 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
 import java.sql.Time;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "skeniranakarta")
-public class SkeniranaKartaEntity {
-    @Id
+@Table(name = "skenirana_karta")
+public class SkeniranaKartaEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
+    @Basic
     @Column(name = "vrijeme_skeniranja", nullable = false)
     private Time vrijemeSkeniranja;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_transakcija", nullable = false)
-    @JsonIgnore
-    private TransakcijaEntity idTransakcija;
-
+    @OneToOne
+    @JoinColumn(name = "transakcija_id", referencedColumnName = "id")
+    private TransakcijaEntity transakcija;
+    
 }

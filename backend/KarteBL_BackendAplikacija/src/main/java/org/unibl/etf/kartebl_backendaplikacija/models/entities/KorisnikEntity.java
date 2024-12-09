@@ -2,29 +2,40 @@ package org.unibl.etf.kartebl_backendaplikacija.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.unibl.etf.kartebl_backendaplikacija.base.BaseEntity;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "korisnik")
-public class KorisnikEntity {
-    @Id
+public class KorisnikEntity implements BaseEntity<Integer>
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "korisnicko_ime", nullable = false, referencedColumnName = "korisnicko_ime")
+    @Basic
+    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    private String korisnickoIme;
+    @Basic
+    @Column(name = "sifra", nullable = true, length = 200)
+    private String sifra;
+    @Basic
+    @Column(name = "email", nullable = true, length = 200)
+    private String email;
+    @Basic
+    @Column(name = "ime", nullable = true, length = 50)
+    private String ime;
+    @Basic
+    @Column(name = "prezime", nullable = true, length = 50)
+    private String prezime;
+    @OneToMany(mappedBy = "korisnik")
     @JsonIgnore
-    private OsobaEntity korisnickoIme;
-
-    @OneToMany(mappedBy = "korisnickoImeKorisnik", fetch = FetchType.LAZY)
+    private List<AuthoritiesEntity> authorities;
+    @OneToMany(mappedBy = "korisnik")
     @JsonIgnore
-    private Set<TransakcijaEntity> transakcijas = new LinkedHashSet<>();
-
+    private List<TransakcijaEntity> transakcije;
+    
 }
