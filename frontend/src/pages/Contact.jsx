@@ -2,6 +2,7 @@ import SendEmail from "../components/SendEmail";
 import CallUs from "../components/CallUs";
 import  FAQ from "../components/FAQ";
 
+
 const Contact = () => {
   return (
     <div className="bg-zinc-200">
