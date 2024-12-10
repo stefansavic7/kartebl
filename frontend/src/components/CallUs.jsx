@@ -1,6 +1,6 @@
 const CallUs = () => {
     return (
-        <button className="flex flex-col justify-center items-center w-96 h-64 rounded-2xl bg-gray-100 group transition duration-300">
+        <button className="flex flex-col justify-center items-center w-96 h-64 rounded-2xl bg-zinc-100 group transition transition-all hover:shadow-[0_0_0.9rem_0.6rem_rgba(236,72,153,0.8)] duration-300">
             <div className="relative flex justify-center items-center mt-10">
                 {/* First Icon (Visible by default, hidden on hover) */}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" 
