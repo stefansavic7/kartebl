@@ -8,7 +8,7 @@ const FAQ = ({ question, answer }) => {
   };
 
   return (
-    <div className="w-[48rem] ">
+    <div className="w-[63rem] ">
       <div className={`bg-[#282231] text-white border border-gray-300 transition-all duration-300  ${isOpen ? "rounded-t-xl" : "rounded-xl"}`}>
         <div onClick={toggleFAQ} className="flex justify-between items-center p-4 cursor-pointer">
           <p className="text-lg font-medium">{question}</p>

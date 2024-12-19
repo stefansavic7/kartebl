@@ -10,9 +10,9 @@ const Contact = () => {
         <b className="text-2xl">Često postavljena pitanja</b>
         <FAQ question="Pitanje" answer = "Odgovor nainivfnaisn aisndiasnidn asfjiasndoiasd jasfnoasjdonasd"></FAQ>
         <FAQ question="Pitanjeeeeee eeeeee" answer = "Odgovor"></FAQ>
-        <FAQ question="Pitanje opettttttttttttttttttttttttttt" answer = "Odgovor nainivfnrergferfgerferferaisn aisndiasnidn asfjiasndoiasdfffffffffffffffffffffffffffffffffffffffffffffffffffff jasfnoasjdonasd"></FAQ>
+        <FAQ question="Pitanje opettttttttttttttttttttttttttt" answer = "Odgovor nainivfnrergferfgerdfddddddddddddddddddddddddddddddddddddddddddferferaisn aisndiasnidn asfjiasndoiasdfffffffffffffffffffffffffffffffffffffffffffffffffffff jasfnoasjdonasd"></FAQ>
       </div>
-      <div className="flex justify-center p-10 gap-60">
+      <div className="flex justify-center p-10 gap-60 pb-20 ">
         <SendEmail></SendEmail>
         <CallUs></CallUs>
       </div>
