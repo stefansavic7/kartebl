@@ -2,13 +2,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='' }) {
+export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem' }) {
   const renderTextField = () => {
     const dynamicStyles = {
       width: size,
       '& .MuiOutlinedInput-root': {
         borderRadius: '0.5rem',
-        border: '1px solid #d1d5db',
+        
         '& fieldset': {
           borderColor: 'gray',
         },
@@ -79,6 +79,37 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 type="number"
                 sx={dynamicStyles}
             />
+            );
+          case 'textArea':
+            return (
+              <TextField
+                id="outlined-textarea"
+                label={labelText}
+                defaultValue={defaultValue}
+                helperText={helperText}
+                multiline
+                rows={4}
+                sx={{
+                  ...dynamicStyles,
+                  '& .MuiInputBase-root': {
+                    overflow: 'hidden',
+                    alignItems: 'flex-start',
+                    
+                  },
+                  '& .MuiInputBase-input': {
+                    resize: 'vertical',
+                    overflow: 'auto',
+                    padding: '8px',
+                    lineHeight: '1.5',
+                    border: 'none',
+                  },
+                  '& textarea': {
+                    resize: 'vertical',
+                    border: 'none',
+                    maxHeight: maxHh,
+                  },
+                }}
+              />
             );
         case 'helperText':
             return (
