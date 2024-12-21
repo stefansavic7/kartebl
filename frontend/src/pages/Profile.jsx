@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MyProfile } from "../components/MyProfile.jsx";
+import { Orders } from "../components/Orders.jsx";
 
 const Profile = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -11,12 +12,7 @@ const Profile = () => {
       <MyProfile></MyProfile>
     </div>,
     <div className="p-5">
-      <h2 className="text-2xl font-bold mb-4">Narudžbe</h2>
-      <ul className="list-disc pl-5">
-        <li>Narudžba #1</li>
-        <li>Narudžba #2</li>
-        <li>Narudžba #3</li>
-      </ul>
+      <Orders></Orders>
     </div>,
     <div className="p-5">
       <h2 className="text-2xl font-bold mb-4">Podešavanja</h2>
