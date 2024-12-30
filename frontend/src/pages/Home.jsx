@@ -1,4 +1,3 @@
-import Input from "../components/Input"; 
 import Event from "../components/Event";
 import Zdravko from "../assets/zdravko.jpeg";
 import RibljaCorba from "../assets/RibljaCorba.jpg";
