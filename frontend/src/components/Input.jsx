@@ -2,7 +2,19 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem' }) {
+
+export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem', rows=4, minValue=1, onChange }) {
+ 
+  const [value, setValue] = React.useState(defaultValue);
+
+  const minNum = (e) =>{
+    const newValue = Math.max(minValue, Number(e.target.value));
+    setValue(newValue);
+    if (onChange) {
+      onChange(e);
+    }
+  }
+  
   const renderTextField = () => {
     const dynamicStyles = {
       width: size,
@@ -77,6 +89,8 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 id="outlined-number"
                 label={labelText}
                 type="number"
+                value={value}
+                onChange={minNum}    
                 sx={dynamicStyles}
             />
             );
@@ -88,7 +102,7 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 defaultValue={defaultValue}
                 helperText={helperText}
                 multiline
-                rows={4}
+                rows={rows}
                 sx={{
                   ...dynamicStyles,
                   '& .MuiInputBase-root': {

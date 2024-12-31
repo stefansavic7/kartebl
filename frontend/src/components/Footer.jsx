@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="bg-[#282231] text-white">
       {/* Kontejner za slike i sadržaj */}
-      <div className="flex flex-wrap items-center justify-between container mx-auto py-6 px-4 lg:px-12">
+      <div className="flex flex-wrap items-center justify-between container mx-auto pt-6 px-4 lg:px-12">
         {/* Leva slika */}
         <img
           className="h-[15%] w-[15%] mb-6 lg:mb-0"
@@ -15,7 +15,7 @@ const Footer = () => {
         />
 
         {/* Informacije */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center sm:text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-24 text-center sm:text-left">
           {/* Opšte informacije */}
           <div>
             <span className="text-xl font-bold mb-3 block">
