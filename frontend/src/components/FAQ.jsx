@@ -12,7 +12,7 @@ const FAQ = ({ question, answer }) => {
       <div className={`bg-[#282231] text-white border border-gray-300 transition-all duration-300  ${isOpen ? "rounded-t-xl" : "rounded-xl"}`}>
         <div onClick={toggleFAQ} className="flex justify-between items-center p-4 cursor-pointer">
           <p className="text-lg font-medium">{question}</p>
-          <span className={`transform transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}>
+          <span className={`transform transition-transform ${isOpen ? "rotate-0" : "rotate-180"}`}>
             <i class="fa-solid fa-chevron-up"></i>
           </span>
         </div>
