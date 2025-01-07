@@ -4,7 +4,7 @@ import ticketImageLeft from '../assets/ticketl.png';
 
 const Footer = () => {
   return (
-    <div className="bg-[#282231] text-white">
+    <div className="bg-[#282231] text-white z-50">
       {/* Kontejner za slike i sadržaj */}
       <div className="flex flex-wrap items-center justify-between container mx-auto pt-6 px-4 lg:px-12">
         {/* Leva slika */}
