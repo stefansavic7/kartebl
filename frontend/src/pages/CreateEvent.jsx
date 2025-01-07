@@ -4,35 +4,7 @@ import Zdravko from "../assets/zdravko.jpeg"
 import Event from "../components/Event"
 import React, { useState } from "react";
 
-/*const [adminId, setAdminId] = useState('');
-  const [adminName, setAdminName] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleInputChange = (e) => {
-    const id = e.target.value;
-    setAdminId(id);
-
-    if (id) {
-      axios
-        .get(`http://localhost:9000/administratori/${id}`)
-        .then((response) => {
-          setAdminName(response.data.ime || '');
-          setErrorMessage('');
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 404) {
-            setAdminName('');
-            setErrorMessage('Not found');
-          } else {
-            setAdminName('');
-            setErrorMessage('An error occurred. Please try again.');
-          }
-        });
-    } else {
-      setAdminName('');
-      setErrorMessage('');
-    }
-  }*/
 
 function TicketForm() {
   const [numberOfTickets, setNumberOfTickets] = React.useState(1);
@@ -143,8 +115,50 @@ const CreateEvent = ()=>{
 
   const [isCheckVisible, setIsCheckVisible] = useState(false);
     
-    const openCheck = () => setIsCheckVisible(true);
-    const closeCheck = () => setIsCheckVisible(false);
+    const openCheck = () => {
+      document.documentElement.classList.add("overflow-hidden");
+      setIsCheckVisible(true);
+    }
+    const closeCheck = () => {
+      document.documentElement.classList.remove("overflow-hidden");
+      setIsCheckVisible(false);
+    }
+
+    const handleSubmit = async () => {
+      const naziv = document.getElementsByName("Naslov")[0]?.value || "";
+      const datum = document.getElementsByName("Datum")[0]?.value || "";
+      const vrijeme = (document.getElementsByName("Vrijeme")[0]?.value + ":00")||""; 
+      const lokacija = document.getElementsByName("Lokacija")[0]?.value || "";
+      const opis = document.getElementsByName("Opis")[0]?.value || "";
+
+      const slika = document.getElementsByName("Slika")[0]?.value || null; // 🟣 Added "Slika" field
+      const administratorId = document.getElementsByName("AdministratorId")[0]?.value || "6"; // 🟣 Added "AdministratorId"
+      const organizatorId = document.getElementsByName("OrganizatorId")[0]?.value || "2"; // 🟣 Added "OrganizatorId"
+
+      // Create the event object
+      const event = { naziv, datum, vrijeme, lokacija, opis, slika, administratorId, organizatorId };
+  
+      try {
+        // Send the event to the backend
+        const response = await fetch("http://localhost:9000/dogadjaji", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(event),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          alert(`Event Created Successfully:\n${JSON.stringify(result, null, 2)}`);
+        } else {
+          alert("Failed to create event. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error creating event:", error);
+        alert("An error occurred while creating the event.");
+      }
+    };
       
     return(
         <div className="flex flex-col items-center justify-center m-10">
@@ -162,12 +176,14 @@ const CreateEvent = ()=>{
                 </button>
                 {message && <p>{message}</p>}
             </div>
+
+
             <Input name="Lokacija"fieldType='outlined-required' labelText = 'Lokacija dogadjaja'></Input>
             <Input name="Datum"fieldType='outlined-required' labelText = 'Datum dogadjaja (dd.mm.yyyy.)' defaultValue={date} onBlur={handleDateChange}></Input>
             {errors.date && <p className="text-red-600">{errors.date}</p>}
             <Input name="Vrijeme"fieldType='outlined-required' labelText = 'Vrijeme dogadjaja (hh:mm)' defaultValue={time} onBlur={handleTimeChange}></Input>
             {errors.time && <p className="text-red-600">{errors.time}</p>}
-            <Input name="Informacije"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ="" helperText='' maxHh='100rem'></Input>
+            <Input name="Opis"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ="" helperText='' maxHh='100rem'></Input>
             <TicketForm></TicketForm>
             <Event key={refreshKey} Picture={Zdravko} Title={document.getElementsByName("Naslov")[0]?.value} Date={document.getElementsByName("Datum")[0]?.value +" u "+ document.getElementsByName("Vrijeme")[0]?.value+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
             <div className="flex gap-10">
@@ -180,8 +196,9 @@ const CreateEvent = ()=>{
                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]"onClick={openCheck}>
                     Pošalji zahtjev za objavu
                 </button>
+                
                 {isCheckVisible && (
-                  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                  <div className="z-50 fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-4 rounded shadow-lg w-80 flex flex-col items-center justify-center">
                       <div className="flex justify-between items-center gap-16 mb-10 ml-2 mr-2">
                         <h2 className="text-lg font-semibold">Potvrdi slanje zahtjeva</h2>
@@ -190,12 +207,13 @@ const CreateEvent = ()=>{
                         </button>
                       </div>
                         <span >Da li ste sigurni da</span><span> želite da pošaljete zahtjev </span><span>za objavu događaja?</span>
-                      <button className="mt-10 bg-[#ec4899] text-white rounded shadow hover:opacity-70 transition-opacity duration-[400ms] w-full h-10">
+                      <button className="mt-10 bg-[#ec4899] text-white rounded shadow hover:opacity-70 transition-opacity duration-[400ms] w-full h-10" onClick={handleSubmit}>
                          Pošalji zahtjev
                       </button>
                     </div>
                   </div>
                 )}
+                
             </div>
             {isVisible && (
               <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-40">
@@ -217,8 +235,9 @@ const CreateEvent = ()=>{
                     </div>
                   </div>
                   <div className="w-[65rem]  whitespace-pre-wrap">
-                    {document.getElementsByName("Informacije")[0]?.value}
+                    {document.getElementsByName("Opis")[0]?.value}
                   </div>
+                  
                   <div className="flex flex-col justify-center items-center bg-zinc-200 rounded-2xl px-10 my-5">
                     <span className="text-2xl font-bold mb-5">Karte</span>
                     {Array.from(document.getElementsByName("Karta")).map((karta, index) => {
@@ -226,7 +245,7 @@ const CreateEvent = ()=>{
                     const bonusInfoInput = document.getElementsByName("BonusInfo")[index];
 
                     return (
-                      <div key={index} className="flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
+                      <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
                         <span className="font-bold text-xl ">{karta?.value}</span>
                         <div className="bg-white rounded-xl text-black m-2 p-2">
                           <div><b>Cijena:</b> {cijenaInput?.value} KM</div>
