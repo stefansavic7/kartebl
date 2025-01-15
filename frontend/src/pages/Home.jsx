@@ -9,7 +9,8 @@ import React, { useState } from "react";
 
  
 const Home = () => {
-   /*// Initialize adminId as a number
+   // Initialize adminId as a number
+   /*
    const [adminId, setAdminId] = useState('');
    const [adminName, setAdminName] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
@@ -45,8 +46,10 @@ const Home = () => {
            setErrorMessage('An error occurred. Please try again.');
          }
        });
-     }*/
+     }
+       */
  
+       
   return (
     <div className="flex flex-wrap justify-center items-center">
       <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>

@@ -24,11 +24,13 @@ export const MyProfile = () => {
       <div className="mt-6 bg-white p-6 rounded-lg shadow-md grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Ime:</label>
+          
           <input
-            type="text"
-            value="Zdravko"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+          type="text"
+          value="Zdravko"
+          readOnly
+          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"
+    />
         </div>
 
         <div>
@@ -36,7 +38,8 @@ export const MyProfile = () => {
           <input
             type="text"
             value="Colic"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            readOnly
+            className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"
           />
         </div>
 
@@ -45,8 +48,8 @@ export const MyProfile = () => {
           <input
             type="text"
             value="zdravko.colic@gmail.com"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+            readOnly
+            className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"          />
         </div>
 
         <div className="relative">
@@ -54,8 +57,8 @@ export const MyProfile = () => {
           <input
             type={showPassword ? "text" : "password"}
             value="moja_lozinka"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+            readOnly
+            className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"          />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
