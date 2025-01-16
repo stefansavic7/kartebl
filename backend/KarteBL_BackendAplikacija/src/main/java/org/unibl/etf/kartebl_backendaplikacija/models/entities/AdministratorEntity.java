@@ -17,7 +17,7 @@ public class AdministratorEntity implements BaseEntity<Integer>
     @Column(name = "id", nullable = false)
     private Integer id;
     @Basic
-    @Column(name = "korisnicko_ime", nullable = false, length = 50, unique = true)
+    @Column(name = "korisnicko_ime", nullable = true, length = 50, unique = true)
     private String korisnickoIme;
     @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
@@ -32,7 +32,7 @@ public class AdministratorEntity implements BaseEntity<Integer>
     @Column(name = "prezime", nullable = false, length = 50)
     private String prezime;
     @Basic
-    @Column(name = "email", nullable = true, length = 60)
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
     @OneToMany(mappedBy = "administrator")
     @JsonIgnore

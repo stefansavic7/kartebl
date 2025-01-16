@@ -17,13 +17,13 @@ public class KorisnikEntity implements BaseEntity<Integer>
     @Column(name = "id", nullable = false)
     private Integer id;
     @Basic
-    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    @Column(name = "korisnicko_ime", nullable = true, length = 50)
     private String korisnickoIme;
     @Basic
-    @Column(name = "sifra", nullable = true, length = 200)
+    @Column(name = "sifra", nullable = false, length = 200)
     private String sifra;
     @Basic
-    @Column(name = "email", nullable = true, length = 200)
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
     @Basic
     @Column(name = "ime", nullable = true, length = 50)
@@ -38,4 +38,18 @@ public class KorisnikEntity implements BaseEntity<Integer>
     @JsonIgnore
     private List<TransakcijaEntity> transakcije;
     
+    public KorisnikEntity(Users user)
+    {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.sifra = user.getPassword();
+        this.korisnickoIme = user.getKorisnickoIme();
+        
+        //TODO: authority dodaj
+    }
+    
+    public KorisnikEntity()
+    {
+    
+    }
 }

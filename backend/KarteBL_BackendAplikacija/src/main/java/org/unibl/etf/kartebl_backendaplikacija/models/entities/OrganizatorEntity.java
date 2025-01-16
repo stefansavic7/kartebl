@@ -17,16 +17,16 @@ public class OrganizatorEntity implements BaseEntity<Integer>
     @Column(name = "id", nullable = false)
     private Integer id;
     @Basic
-    @Column(name = "korisnicko_ime", nullable = false, length = 50)
+    @Column(name = "korisnicko_ime", nullable = true, length = 50)
     private String korisnickoIme;
     @Basic
     @Column(name = "jmbg", nullable = false, length = 13)
     private String jmbg;
     @Basic
-    @Column(name = "sifra", nullable = true, length = 200)
+    @Column(name = "sifra", nullable = false, length = 200)
     private String sifra;
     @Basic
-    @Column(name = "email", nullable = true, length = 70)
+    @Column(name = "email", nullable = false, length = 255)
     private String email;
     @OneToMany(mappedBy = "organizator")
     @JsonIgnore
