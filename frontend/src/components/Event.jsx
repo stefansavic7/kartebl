@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Event = ({Picture, Title, Location, Date}) => {
     return (
-        <div className="group rounded-2xl bg-[#282231] text-white w-[20rem] h-[22rem] m-14 transition-all duration-300 hover:shadow-[0_0_0.9rem_0.6rem_rgba(236,72,153,0.8)] hover:-translate-y-2 overflow-hidden">
+        <div className="group rounded-2xl bg-[#282231] text-white w-[24rem] h-[22rem] m-12 transition-all duration-300 hover:shadow-[0_0_0.9rem_0.6rem_rgba(236,72,153,0.8)] hover:-translate-y-2 overflow-hidden">
             <Link className="block text-center ">
                 <div className="pt-2 pb-2 text-lg">
                     <b className="group-hover:text-pink-500 transition-colors duration-300">{Title}</b>
