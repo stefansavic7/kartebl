@@ -2,13 +2,30 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='' }) {
+
+export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem', rows=4, minValue=1, onChange, onBlur, name}) {
+ 
+  const [value, setValue] = React.useState(defaultValue);
+
+  const minNum = (e) =>{
+    const newValue = Math.max(minValue, Number(e.target.value));
+    setValue(newValue);
+    if (onChange) {
+      onChange(e);
+    }
+  }
+
+  const setV = (e) =>{
+    setValue(e.target.value);
+    
+  }  
+
   const renderTextField = () => {
     const dynamicStyles = {
       width: size,
       '& .MuiOutlinedInput-root': {
         borderRadius: '0.5rem',
-        border: '1px solid #d1d5db',
+        
         '& fieldset': {
           borderColor: 'gray',
         },
@@ -17,11 +34,13 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
         },
         '&.Mui-focused fieldset': {
           borderColor: '#ec4899',
-        }
+        },
+        zIndex: 0,
       },
       '& .MuiInputLabel-root': {
         color: 'gray',
         transition: 'all 0.3s ease',
+        zIndex: 1,
         '&.Mui-focused': {
           color: '#ec4899',
         },
@@ -48,6 +67,10 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 id="outlined-required"
                 label={labelText}
                 defaultValue={defaultValue}
+                onBlur={onBlur}
+                value={value}
+                onChange={setV}
+                name={name}
                 sx={dynamicStyles}
               />
             );
@@ -77,8 +100,43 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 id="outlined-number"
                 label={labelText}
                 type="number"
+                value={value}
+                onChange={minNum}
+                name={name}    
                 sx={dynamicStyles}
             />
+            );
+          case 'textArea':
+            return (
+              <TextField
+                id="outlined-textarea"
+                label={labelText}
+                defaultValue={defaultValue}
+                helperText={helperText}
+                multiline
+                rows={rows}
+                name={name}
+                sx={{
+                  ...dynamicStyles,
+                  '& .MuiInputBase-root': {
+                    overflow: 'hidden',
+                    alignItems: 'flex-start',
+                    
+                  },
+                  '& .MuiInputBase-input': {
+                    resize: 'vertical',
+                    overflow: 'auto',
+                    padding: '8px',
+                    lineHeight: '1.5',
+                    border: 'none',
+                  },
+                  '& textarea': {
+                    resize: 'vertical',
+                    border: 'none',
+                    maxHeight: maxHh,
+                  },
+                }}
+              />
             );
         case 'helperText':
             return (

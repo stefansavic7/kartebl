@@ -1,7 +1,3 @@
-// import NavBar from "./components/NavBar";
-// import SendEmail from "./components/SendEmail";
-// import CallUs from "./components/CallUs";
-//import BasicInput from "./components/BasicInput";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
@@ -13,6 +9,7 @@ import axios from 'axios'
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
+import CreateEvent from "./pages/CreateEvent";
 
 
 const App = () => {
@@ -50,6 +47,7 @@ const App = () => {
           <Route path="karte" element={<Tickets />} />
           <Route path="info" element={<About />} />
           <Route path="profil" element={<Profile />} />
+          <Route path="createEvent" element={<CreateEvent />} />
           <Route path="prijava" element={<Login />} />
           <Route path="registracija" element={<Registration />} />
           <Route path="*" element={<div>ERROR 404</div>} />

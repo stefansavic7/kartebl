@@ -36,7 +36,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ProjectSecurityConfiguration {
-    
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
