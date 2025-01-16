@@ -15,7 +15,6 @@ public class KorisnikDto
 {
     private Integer id;
     private String korisnickoIme;
-    private String sifra;
     private String email;
     private String ime;
     private String prezime;

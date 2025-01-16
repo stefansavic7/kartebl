@@ -12,7 +12,7 @@ public class OrganizatorRequest {
 
     private String email;
 
-    private int administratorId;
+    private Integer administratorId;
 
     private String jmbg;
 }

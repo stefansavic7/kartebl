@@ -1,4 +1,4 @@
-package org.unibl.etf.kartebl_backendaplikacija.services;
+package org.unibl.etf.kartebl_backendaplikacija.services.impl;
 
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -8,6 +8,7 @@ import org.unibl.etf.kartebl_backendaplikacija.base.CrudJpaService;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.TransakcijaEntity;
 import org.unibl.etf.kartebl_backendaplikacija.repositories.TransakcijaRepository;
+import org.unibl.etf.kartebl_backendaplikacija.services.TransakcijaService;
 
 @Service
 @Transactional
