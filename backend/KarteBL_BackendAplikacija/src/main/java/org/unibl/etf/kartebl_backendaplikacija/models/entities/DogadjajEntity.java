@@ -37,6 +37,8 @@ public class DogadjajEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "slika", nullable = true)
     private byte[] slika;
+    @Column(name = "odobren")
+    private boolean odobren;
     @ManyToOne
     @JoinColumn(name = "administrator_id", referencedColumnName = "id", nullable = false)
     private AdministratorEntity administrator;

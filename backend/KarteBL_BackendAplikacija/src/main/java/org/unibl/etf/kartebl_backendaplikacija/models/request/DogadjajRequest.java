@@ -24,4 +24,6 @@ public class DogadjajRequest {
     private String administratorId;
 
     private String organizatorId;
+
+    private boolean odobren;
 }
