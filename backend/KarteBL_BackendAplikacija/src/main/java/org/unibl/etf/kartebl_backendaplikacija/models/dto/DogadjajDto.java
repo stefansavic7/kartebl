@@ -33,6 +33,8 @@ public class DogadjajDto {
 
     private String organizatorId;
 
+    private boolean odobren;
+
 
 
 
