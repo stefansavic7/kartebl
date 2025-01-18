@@ -15,6 +15,7 @@ public class OrganizatorDto {
     private String email;
 
     private String jmbg;
+    private Integer administratorId;
 
 
 }
