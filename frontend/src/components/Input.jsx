@@ -3,13 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 
-export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem', rows=4, minValue=1, onChange, onBlur, name}) {
+export default function Input({ fieldType, size = '20rem', labelText = 'default', defaultValue ="", helperText='', maxHh='40rem', rows=4, minValue=1,maxValue=1000, onChange, onBlur, name}) {
  
   const [value, setValue] = React.useState(defaultValue);
 
-  const minNum = (e) =>{
-    const newValue = Math.max(minValue, Number(e.target.value));
-    setValue(newValue);
+
+  const minMaxNum = (e) =>{
+    const v = Math.max(minValue, Math.min(maxValue, Number(e.target.value)));;
+    setValue(v);
     if (onChange) {
       onChange(e);
     }
@@ -101,7 +102,7 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 label={labelText}
                 type="number"
                 value={value}
-                onChange={minNum}
+                onChange={minMaxNum}
                 name={name}    
                 sx={dynamicStyles}
             />

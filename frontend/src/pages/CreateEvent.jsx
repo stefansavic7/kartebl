@@ -1,8 +1,9 @@
 import Input from "../components/Input"; 
 import Footer from "../components/Footer";
-import Zdravko from "../assets/zdravko.jpeg"
-import Event from "../components/Event"
+import Zdravko from "../assets/zdravko.jpeg";
+import Event from "../components/Event";
 import React, { useState } from "react";
+import ChooseTickets from "../components/ChooseTickets";
 
 
 
@@ -17,7 +18,7 @@ function TicketForm() {
   return (
        
     <div className="flex flex-col items-center justify-center m-5">
-      <Input name="Num" id= "numTickets"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={numberOfTickets}
+      <Input name="Num" id= "numTickets"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={numberOfTickets} minValue={1}
         onChange={(e) => {
           handleNumberOfTicketsChange(e);
           e.target.onChange(e);
@@ -26,9 +27,9 @@ function TicketForm() {
         {Array.from({ length: numberOfTickets }).map((_, index) => (
           <div key={index} className="flex bg-white rounded-2xl p-5">
             <Input name="Karta"fieldType="outlined-required" labelText="Naziv karte" />
-            <Input name="Cijena"fieldType="number" labelText="Cijena karte u KM*" minValue={0} />
+            <Input name="Cijena"fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
             <Input name="BonusInfo"fieldType="outlined-required" labelText="Dodatne informacije" />
-            <Input name="NumTickets"fieldType="number" labelText="Broj karata*" minValue={0} />
+            <Input name="NumTickets"fieldType="number" labelText="Broj karata*" minValue={1} maxValue={1000}/>
           </div>
         ))}
       </div>
@@ -255,6 +256,7 @@ const CreateEvent = ()=>{
                     );
                   })}
                   </div>
+                  <ChooseTickets></ChooseTickets>
                   <Footer></Footer>
                 </div>
               </div>
