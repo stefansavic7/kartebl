@@ -1,5 +1,6 @@
 package org.unibl.etf.kartebl_backendaplikacija.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class DogadjajController extends CrudController<Integer, DogadjajRequest,
 
 
     @PostMapping("/insertDogadjaj")
-    public Object insertWithPicture(@RequestPart DogadjajRequest podaci, @RequestPart MultipartFile slika) throws NotFoundException
+    public DogadjajDto insertWithPicture(@RequestPart DogadjajRequest podaci, @RequestPart MultipartFile slika) throws NotFoundException
     {
         return dogadjajService.insertWithPicture(podaci, slika);
 
@@ -38,8 +39,14 @@ public class DogadjajController extends CrudController<Integer, DogadjajRequest,
         byte[] slika = dogadjaj.getSlika();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);  // ili odgovarajući tip slike (PNG, GIF...)
+        headers.setContentType(MediaType.parseMediaType(dogadjaj.getTipSlike()));  // ili odgovarajući tip slike (PNG, GIF...)
         return new ResponseEntity<>(slika, headers, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateDogadjaj/{id}")
+    public DogadjajDto update(@PathVariable Integer id, @RequestPart  DogadjajRequest podaci, @RequestPart MultipartFile slika) throws NotFoundException
+    {
+        return dogadjajService.update(id, podaci, slika);
     }
 
 
