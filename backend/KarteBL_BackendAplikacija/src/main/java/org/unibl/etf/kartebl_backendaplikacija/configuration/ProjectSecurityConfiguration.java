@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -60,10 +61,45 @@ public class ProjectSecurityConfiguration {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(customizer -> customizer
+                        
+                        .requestMatchers(HttpMethod.GET, "dogadjaji/**", "karte/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "transakcije/**")
+                        .permitAll()
                         .requestMatchers("login", "register")
                         .permitAll()
-                        .requestMatchers("administratori/**", "organizatori/**")
+                        
+                        .requestMatchers("administratori/**", "organizatori/**", "skeniraneKarte/**") //TODO: za skenirane karte ce vjerovatno trebati novi korisnik koji ce takodje moci raditi get i post ili samo dodati u korisnika kolonu zaposleni koja ako je true moze skenirati
                         .hasRole("administrator")
+                        
+                        .requestMatchers(HttpMethod.PUT,"transakcije/**")
+                        .hasRole("administrator")
+                        .requestMatchers(HttpMethod.DELETE,"transakcije/**")
+                        .hasRole("administrator")
+                        
+                        .requestMatchers(HttpMethod.POST,"dogadjaji/**")
+                        .hasAnyRole("administrator", "organizator")
+                        .requestMatchers(HttpMethod.PUT,"dogadjaji/**")
+                        .hasAnyRole("administrator", "organizator")
+                        .requestMatchers(HttpMethod.DELETE,"dogadjaji/**")
+                        .hasRole("administrator")
+                        
+                        .requestMatchers(HttpMethod.POST,"karte/**")
+                        .hasAnyRole("administrator", "organizator")
+                        .requestMatchers(HttpMethod.PUT,"karte/**")
+                        .hasAnyRole("administrator", "organizator")
+                        .requestMatchers(HttpMethod.DELETE,"karte/**")
+                        .hasRole("administrator")
+                        
+                        .requestMatchers(HttpMethod.GET,"korisnici/**")
+                        .hasAnyRole("administrator", "korisnik")
+                        .requestMatchers(HttpMethod.POST,"korisnici/**")
+                        .hasRole("administrator")
+                        .requestMatchers(HttpMethod.PUT,"korisnici/**")
+                        .hasAnyRole("administrator", "korisnik")
+                        .requestMatchers(HttpMethod.DELETE,"korisnici/**")
+                        .hasAnyRole("administrator", "korisnik")
+                        
                         .anyRequest().authenticated())
                 .oauth2Login(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
