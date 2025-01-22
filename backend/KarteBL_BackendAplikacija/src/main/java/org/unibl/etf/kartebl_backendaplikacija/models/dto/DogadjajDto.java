@@ -1,15 +1,9 @@
 package org.unibl.etf.kartebl_backendaplikacija.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.Data;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.KartaEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.OrganizatorEntity;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 
 @Data
 public class DogadjajDto {
@@ -29,11 +23,12 @@ public class DogadjajDto {
 
     private byte[] slika;
 
-    private String administratorId;
+    private String tipSlike;
 
-    private String organizatorId;
+    private Integer administratorId;
 
+    private Integer organizatorId;
 
-
+    private boolean odobren;
 
 }
