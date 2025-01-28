@@ -33,3 +33,5 @@ build/
 ### VS Code ###
 .vscode/
 t
+
+/dev_info/

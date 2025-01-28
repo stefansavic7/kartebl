@@ -21,9 +21,11 @@ public class DogadjajRequest {
 
     private byte[] slika;
 
-    private String administratorId;
+    private String tipSlike;
 
-    private String organizatorId;
+    private Integer administratorId;
+
+    private Integer organizatorId;
 
     private boolean odobren;
 }
