@@ -10,32 +10,34 @@ import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import CreateEvent from "./pages/CreateEvent";
+import { EventList } from "./pages/EventList";
 
 
 const App = () => {
 
 
-  // const [data, setData] = useState([])
-  // useEffect(()=>{
-  //   axios.get("http://localhost:9000/dogadjaji").then((res)=>{
-  //     setData(res.data)
-  //   })
-  // }, [])
+ /*  const [data, setData] = useState([])
+   useEffect(()=>{
+     axios.get("http://localhost:9000/dogadjaji").then((res)=>{
+       setData(res.data)
+     })
+   }, [])
 
-  // useEffect(()=>{
-  //   console.log(data);
+   useEffect(()=>{
+     console.log(data);
     
-  // }, [data])
+   }, [data])
 
-  // data.forEach(item=>{
-  //   console.log(item.naziv)
-  // })
+   data.forEach(item=>{
+     console.log(item.naziv)
+   })
 
 
-  // const data = fetch("http://localhost:9000/dogadjaji")
-  // .then((res)=>res.json)
-  // .then((data)=>data)
-  // console.log(data)
+   const data = fetch("http://localhost:9000/dogadjaji")
+   .then((res)=>res.json)
+   .then((data)=>data)
+   console.log(data)
+   */
 
 
   return (
@@ -48,6 +50,7 @@ const App = () => {
           <Route path="info" element={<About />} />
           <Route path="profil" element={<Profile />} />
           <Route path="createEvent" element={<CreateEvent />} />
+          <Route path="eventList" element={<EventList/>}></Route>
           <Route path="prijava" element={<Login />} />
           <Route path="registracija" element={<Registration />} />
           <Route path="*" element={<div>ERROR 404</div>} />
