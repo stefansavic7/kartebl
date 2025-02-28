@@ -30,7 +30,9 @@ export const EventList = () => {
   ];
 
   return (
+    
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold text-center mb-6">Lista Događaja</h1>
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
