@@ -1,66 +1,108 @@
-import Event from "../components/Event";
-import Zdravko from "../assets/zdravko.jpeg";
-import RibljaCorba from "../assets/RibljaCorba.jpg";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useState } from "react";
+import Event from "../components/Event";
 
-
-
-
- 
 const Home = () => {
-   // Initialize adminId as a number
-   /*
-   const [adminId, setAdminId] = useState('');
-   const [adminName, setAdminName] = useState('');
-   const [errorMessage, setErrorMessage] = useState('');
- 
-   const handleInputChange = (e) => {
-     const id = e.target.value;
- 
-     // Only set the adminId if the input is a valid number
-     if (id !== '' && !isNaN(id)) {
-       setAdminId(id);
-       fetchAdminName(id); // Fetch the admin data
-     } else {
-       setAdminId('');
-       setAdminName('');
-       setErrorMessage('');
-     }
-   };
- 
-   const fetchAdminName = (id) => {
-     axios
-       .get(`http://localhost:9000/dogadjaji/${id}`)
-       .then((response) => {
-         // Assuming 'naziv' is the admin name
-         setAdminName(response.data.naziv || '');
-         setErrorMessage(''); // Clear error message if successful
-       })
-       .catch((error) => {
-         if (error.response && error.response.status === 404) {
-           setAdminName('');
-           setErrorMessage('Not found');
-         } else {
-           setAdminName('');
-           setErrorMessage('An error occurred. Please try again.');
-         }
-       });
-     }
-       */
- 
-       
+  const [events, setEvents] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
+
+  const fetchAllEvents = () => {
+    axios
+      .get('http://localhost:9000/dogadjaji')
+      .then((response) => {
+        setEvents(response.data);
+        setErrorMessage('');
+      })
+      .catch((error) => {
+        setErrorMessage('An error occurred while fetching events.');
+      });
+  };
+
+
+    const [id, setId] = useState('');
+    const [ime, setIme] = useState('');
+    const [error, setError] = useState(null);
+  
+    const handleInputChange = (e) => {
+      setId(e.target.value);
+    };
+  
+    const fetchKorisnik = async () => {
+      if (!id) {
+        setError('Please enter an ID');
+        return;
+      }
+  
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+  
+      if (!token) {
+        setError('Token not found. Please log in.');
+        return;
+      }
+  
+      try {
+        const response = await fetch(`http://localhost:9000/korisnici/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Add token in Authorization header
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Korisnik not found or unauthorized');
+        }
+  
+        const data = await response.json();
+        setIme(data.ime);
+        setError(null);  // Clear error if the request is successful
+      } catch (err) {
+        setIme('');
+        setError(err.message);
+      }
+    };
+
+
   return (
     <div className="flex flex-wrap justify-center items-center">
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={RibljaCorba} Title="Koncert Riblje Corbe" Location="Akvana" Date="30.11.2025."></Event>
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={RibljaCorba} Title="Koncert Riblje Corbe" Location="Akvana" Date="30.11.2025."></Event>
+      {events.length > 0 ? (
+        events.map((event, index) => {
+          
+          return (
+            <Event
+              key={index}
+              Picture={`data:image/jpeg;base64,${event.slika}`} // Pass the valid image here
+              Title={event.naziv}
+              Location={event.lokacija}
+              Date={event.datum.split('-').reverse().join('.') + '.' + " u " + event.vrijeme.slice(0, 5) + "h"}
+            />
+          );
+        })
+      ) : (
+        <p>No events available</p>
+      )}
 
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
+
+      <h2>Enter ID to get Korisnik's ime</h2>
+      <input
+        type="text"
+        value={id}
+        onChange={handleInputChange}
+        placeholder="Enter ID"
+      />
+      <button onClick={fetchKorisnik}>Fetch Ime</button>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {ime && <p><strong>Ime:</strong> {ime}</p>}
     </div>
-    
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
