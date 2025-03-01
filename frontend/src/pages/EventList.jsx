@@ -5,6 +5,9 @@ import RibljaCorba from "../assets/RibljaCorba.jpg";
 import Zdravko from "../assets/Zdravko.jpeg";
 
 export const EventList = () => {
+
+  
+/*
   const events = [
     {
       id: 1,
@@ -28,10 +31,18 @@ export const EventList = () => {
       approved: true,
     },
   ];
+  */
+
+   //ovde stao. nastaviti sa preuzimanjem tokena.
+
+
+
+
 
   return (
     
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      
       
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold text-center mb-6">Lista Događaja</h1>
