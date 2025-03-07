@@ -38,7 +38,7 @@ const Home = () => {
       }
   
       // Get token from localStorage
-      const token = localStorage.getItem('token');
+      const token = JSON.parse(localStorage.getItem("token"));
   
       if (!token) {
         setError('Token not found. Please log in.');
