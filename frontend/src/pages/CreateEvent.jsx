@@ -39,17 +39,30 @@ function TicketForm() {
 const CreateEvent = ()=>{
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState("");
-    const [image, setImage] = useState(null);
-  
+    const [slika, setSlika] = useState(null);
+    const [showIMG, setShowIMG] = useState(null)
+    
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
           setFile(selectedFile);
           setMessage("");
-          const imageUrl = URL.createObjectURL(selectedFile); // Use selectedFile instead of file
-          setImage(imageUrl);
+  
+          const reader = new FileReader();
+          reader.readAsArrayBuffer(selectedFile);
+          reader.onloadend = () => {
+              const blob = new Blob([reader.result], { type: selectedFile.type });
+          
+              
+              setSlika(blob);
+              slika.type=selectedFile.type
+              console.log(slika);
+              
+          };
+          const imageUrl = URL.createObjectURL(selectedFile);
+          setShowIMG(imageUrl)
       }
-      };
+  };
   
   
 
@@ -117,25 +130,24 @@ const CreateEvent = ()=>{
       const formattedDatum = datum.replace(/\.$/, "").split(".").reverse().join("-");
       // Convert to YYYY-MM-DD
   
-      const token = localStorage.getItem("token");
+      const token = JSON.parse(localStorage.getItem("token"));
       if (!token) {
           alert("No token found. Please log in.");
           return;
       }
   
-      const administratorId = document.getElementsByName("AdministratorId")[0]?.value || "6";
-      const organizatorId = "2"; // Temporary hardcoded value
-      const odobren = "0";
-      const tip_slike = "image/png";
+      const administratorId = document.getElementsByName("AdministratorId")[0]?.value || "2";
+      const organizatorId = "6"; // Temporary hardcoded value
+      const odobren = false;
+      const tipSlike = "image/png";
   
       console.log("Formatted Date:", formattedDatum);
       
       // ✅ Fix: Ensure `image` exists
-      const slika = image || ""; 
-      console.log("Image URL:", slika); 
+  
   
       // Event object
-      const event = { naziv, datum: formattedDatum, vrijeme, lokacija, opis, slika, administratorId, organizatorId, odobren, tip_slike };
+      const event = { naziv, datum: formattedDatum, vrijeme, lokacija, opis, slika, administratorId, organizatorId, odobren, tipSlike };
   
       try {
         const response = await fetch("http://localhost:9000/dogadjaji", {
@@ -190,7 +202,7 @@ const CreateEvent = ()=>{
             {errors.time && <p className="text-red-600">{errors.time}</p>}
             <Input name="Opis"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ="" helperText='' maxHh='100rem'></Input>
             <TicketForm></TicketForm>
-            <Event key={refreshKey} Picture={image} Title={document.getElementsByName("Naslov")[0]?.value} Date={document.getElementsByName("Datum")[0]?.value +" u "+ document.getElementsByName("Vrijeme")[0]?.value+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
+            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslov")[0]?.value} Date={document.getElementsByName("Datum")[0]?.value +" u "+ document.getElementsByName("Vrijeme")[0]?.value+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
             <div className="flex gap-10">
                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]"onClick={refreshEvent}>
                   Osvježi
@@ -227,7 +239,7 @@ const CreateEvent = ()=>{
                     <b>&times;</b>
                   </button>
                   <span  className="z-50 text-3xl"><b>{document.getElementsByName("Naslov")[0]?.value}</b></span>
-                  {image && <img src={image} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>}
+                  {image && <img src={showIMG} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>}
                   <div className="flex flex-row text-2xl justify-between space-x-[38rem] font-bold">
                     <div className="flex pl-3 gap-1.5">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" className="size-6"><path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 1.144.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"clipRule="evenodd"/></svg>
