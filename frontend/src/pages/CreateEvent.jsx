@@ -1,13 +1,13 @@
 import Input from "../components/Input"; 
 import Footer from "../components/Footer";
 import Event from "../components/Event";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ChooseTickets from "../components/ChooseTickets";
 
 
 
 function TicketForm() {
-  const [numberOfTickets, setNumberOfTickets] = React.useState(1);
+  const [numberOfTickets, setNumberOfTickets] = useState(1);
 
   const handleNumberOfTicketsChange = (e) => {
     const value =Math.max(1,Number(e.target.value)) ;
@@ -28,7 +28,7 @@ function TicketForm() {
             <Input name="Karta"fieldType="outlined-required" labelText="Naziv karte" />
             <Input name="Cijena"fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
             <Input name="BonusInfo"fieldType="outlined-required" labelText="Dodatne informacije" />
-            <Input name="NumTickets"fieldType="number" labelText="Broj karata*" minValue={1} maxValue={1000}/>
+            <Input name="NumTickets"fieldType="number" labelText="Broj karata*" minValue={1} maxValue={100000}/>
           </div>
         ))}
       </div>
@@ -37,32 +37,27 @@ function TicketForm() {
 }
 
 const CreateEvent = ()=>{
-    const [file, setFile] = useState(null);
-    const [message, setMessage] = useState("");
-    const [slika, setSlika] = useState(null);
-    const [showIMG, setShowIMG] = useState(null)
     
+    const [file, setFile] = useState(null);
+    const [slika, setSlika] = useState("");
+    const [showIMG, setShowIMG] = useState(null)
+    const [tipSlike, setTipSlike] = useState("");
+
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
           setFile(selectedFile);
-          setMessage("");
-  
+          setTipSlike(selectedFile.type);
           const reader = new FileReader();
-          reader.readAsArrayBuffer(selectedFile);
+          reader.readAsDataURL(selectedFile);
           reader.onloadend = () => {
-              const blob = new Blob([reader.result], { type: selectedFile.type });
-          
-              
-              setSlika(blob);
-              slika.type=selectedFile.type
-              console.log(slika);
-              
+              const base64String = reader.result.split(",")[1];
+              setSlika(base64String);
           };
           const imageUrl = URL.createObjectURL(selectedFile);
-          setShowIMG(imageUrl)
+          setShowIMG(imageUrl);
       }
-  };
+    };
   
   
 
@@ -77,7 +72,7 @@ const CreateEvent = ()=>{
 
   const validateTime = (value) => {
     const timeRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
-    return timeRegex.test(value) ? '' : 'Pogrešan format. Koristi hh:mm.';
+    return timeRegex.test(value) ? '' : 'Pogrešan format. Koristi hh:mm';
   };
 
   const handleDateChange = (e) => {
@@ -121,6 +116,7 @@ const CreateEvent = ()=>{
     }
 
     const handleSubmit = async () => {
+
       const naziv = document.getElementsByName("Naslov")[0]?.value || "";
       const datum = document.getElementsByName("Datum")[0]?.value || "";
       const vrijeme = (document.getElementsByName("Vrijeme")[0]?.value + ":00") || ""; 
@@ -136,17 +132,10 @@ const CreateEvent = ()=>{
           return;
       }
   
-      const administratorId = document.getElementsByName("AdministratorId")[0]?.value || "2";
+      const administratorId = "2";
       const organizatorId = "6"; // Temporary hardcoded value
       const odobren = false;
-      const tipSlike = "image/png";
   
-      console.log("Formatted Date:", formattedDatum);
-      
-      // ✅ Fix: Ensure `image` exists
-  
-  
-      // Event object
       const event = { naziv, datum: formattedDatum, vrijeme, lokacija, opis, slika, administratorId, organizatorId, odobren, tipSlike };
   
       try {
@@ -159,22 +148,16 @@ const CreateEvent = ()=>{
             body: JSON.stringify(event),
         });
     
-        const responseText = await response.text(); // Get full response text
-        console.log("Response Status:", response.status);
-        console.log("Response Body:", responseText);
-        console.log("Token:", token);
-        
+        const responseText = await response.text();
     
         if (response.ok) {
             const result = JSON.parse(responseText);
             alert(`Event Created Successfully:\n${JSON.stringify(result, null, 2)}`);
         } else {
-            alert(`Failed to create event.\nServer Response: ${responseText}`);
-            console.log(`Failed to create event.\nServer Response: ${responseText}`);
+            alert("Failed to create event");
         }
     } catch (error) {
-        console.error("Error creating event:", error);
-        alert("An error occurred while creating the event.");
+        alert("An error occurred while creating the event: "+error);
     }
   };
     
@@ -190,8 +173,6 @@ const CreateEvent = ()=>{
                 <p className="m-5">
                     {file ?  `${file.name}` : ""}
                 </p>
-              
-                {message && <p>{message}</p>}
             </div>
 
 
@@ -239,10 +220,11 @@ const CreateEvent = ()=>{
                     <b>&times;</b>
                   </button>
                   <span  className="z-50 text-3xl"><b>{document.getElementsByName("Naslov")[0]?.value}</b></span>
-                  {image && <img src={showIMG} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>}
+                  
+                  {showIMG && <img src={showIMG} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>}
                   <div className="flex flex-row text-2xl justify-between space-x-[38rem] font-bold">
                     <div className="flex pl-3 gap-1.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" className="size-6"><path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 1.144.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"clipRule="evenodd"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" className="size-6"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282a1.144 0.742Z" clip-rule="evenodd"/></svg>
                       <div>{document.getElementsByName("Lokacija")[0]?.value}</div>
                     </div>
                     <div className="flex pr-3 pb-10 gap-1.5">
