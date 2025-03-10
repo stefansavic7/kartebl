@@ -152,7 +152,7 @@ const CreateEvent = ()=>{
     
         if (response.ok) {
             const result = JSON.parse(responseText);
-            alert(`Event Created Successfully:\n${JSON.stringify(result, null, 2)}`);
+            alert("Event Created Successfully");
             for(var i=0; i<numberOfTickets; i++)
               for(var j=0; j<document.getElementsByName("NumTickets"+i)[0]?.value || 0;j++){
                 const cijena = document.getElementsByName("Cijena"+i)[0]?.value;
@@ -169,13 +169,8 @@ const CreateEvent = ()=>{
                       },
                       body: JSON.stringify(karta),
                   });
-              
-                  const responseText1 = await response1.text();
-              
-                  if (response1.ok) {
-                      const result1 = JSON.parse(responseText1);
-                      alert(`Ticket Created Successfully:\n${JSON.stringify(result1, null, 2)}`);
-                  } else {
+        
+                  if (!response1.ok) {
                       alert("Failed to create ticket");
                   }
                 } catch (error1) {
