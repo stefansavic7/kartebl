@@ -6,8 +6,7 @@ import ChooseTickets from "../components/ChooseTickets";
 
 
 
-function TicketForm() {
-  const [numberOfTickets, setNumberOfTickets] = useState(1);
+function TicketForm({ numberOfTickets, setNumberOfTickets }) {
 
   const handleNumberOfTicketsChange = (e) => {
     const value =Math.max(1,Number(e.target.value)) ;
@@ -20,15 +19,14 @@ function TicketForm() {
       <Input name="Num" id= "numTickets"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={numberOfTickets} minValue={1}
         onChange={(e) => {
           handleNumberOfTicketsChange(e);
-          e.target.onChange(e);
         }}/>
       <div className="bg-zinc-200 space-y-4 rounded-2xl p-10 mt-5">
         {Array.from({ length: numberOfTickets }).map((_, index) => (
           <div key={index} className="flex bg-white rounded-2xl p-5">
-            <Input name="Karta"fieldType="outlined-required" labelText="Naziv karte" />
-            <Input name="Cijena"fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
-            <Input name="BonusInfo"fieldType="outlined-required" labelText="Dodatne informacije" />
-            <Input name="NumTickets"fieldType="number" labelText="Broj karata*" minValue={1} maxValue={100000}/>
+            <Input name={"Karta"+index}fieldType="outlined-required" labelText="Naziv karte" />
+            <Input name={"Cijena"+index}fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
+            <Input name={"BonusInfo"+index}fieldType="outlined-required" labelText="Dodatne informacije" />
+            <Input name={"NumTickets"+index}fieldType="number" labelText="Broj karata*" minValue={1} maxValue={100000}/>
           </div>
         ))}
       </div>
@@ -37,6 +35,8 @@ function TicketForm() {
 }
 
 const CreateEvent = ()=>{
+    const [numberOfTickets, setNumberOfTickets] = useState(1);
+  
     
     const [file, setFile] = useState(null);
     const [slika, setSlika] = useState("");
@@ -153,12 +153,43 @@ const CreateEvent = ()=>{
         if (response.ok) {
             const result = JSON.parse(responseText);
             alert(`Event Created Successfully:\n${JSON.stringify(result, null, 2)}`);
+            for(var i=0; i<numberOfTickets; i++)
+              for(var j=0; j<document.getElementsByName("NumTickets"+i)[0]?.value || 0;j++){
+                const cijena = document.getElementsByName("Cijena"+i)[0]?.value;
+                const qr = null;
+                const vrstaKarte = document.getElementsByName("Karta"+i)[0]?.value;
+                const karta = { cijena, qr, vrstaKarte, dogadjajId: result.id, organizatorId};
+            
+                try {
+                  const response1 = await fetch("http://localhost:9000/karte", {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json",
+                          "Authorization": `Bearer ${token}`
+                      },
+                      body: JSON.stringify(karta),
+                  });
+              
+                  const responseText1 = await response1.text();
+              
+                  if (response1.ok) {
+                      const result1 = JSON.parse(responseText1);
+                      alert(`Ticket Created Successfully:\n${JSON.stringify(result1, null, 2)}`);
+                  } else {
+                      alert("Failed to create ticket");
+                  }
+                } catch (error1) {
+                    alert("An error occurred while creating the ticket: "+error1);
+                }
+            }
         } else {
             alert("Failed to create event");
         }
     } catch (error) {
         alert("An error occurred while creating the event: "+error);
     }
+
+    
   };
     
       
@@ -182,8 +213,8 @@ const CreateEvent = ()=>{
             <Input name="Vrijeme"fieldType='outlined-required' labelText = 'Vrijeme dogadjaja (hh:mm)' defaultValue={time} onBlur={handleTimeChange}></Input>
             {errors.time && <p className="text-red-600">{errors.time}</p>}
             <Input name="Opis"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ="" helperText='' maxHh='100rem'></Input>
-            <TicketForm></TicketForm>
-            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslov")[0]?.value} Date={document.getElementsByName("Datum")[0]?.value +" u "+ document.getElementsByName("Vrijeme")[0]?.value+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
+            <TicketForm numberOfTickets={numberOfTickets} setNumberOfTickets={setNumberOfTickets}></TicketForm>
+            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslov")[0]?.value} Date={(document.getElementsByName("Datum")[0]?.value||"") +" u "+ (document.getElementsByName("Vrijeme")[0]?.value||"")+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
             <div className="flex gap-10">
                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]"onClick={refreshEvent}>
                   Osvježi
@@ -239,9 +270,10 @@ const CreateEvent = ()=>{
                   
                   <div className="flex flex-col justify-center items-center bg-zinc-200 rounded-2xl px-10 my-5">
                     <span className="text-2xl font-bold mb-5">Karte</span>
-                    {Array.from(document.getElementsByName("Karta")).map((karta, index) => {
-                    const cijenaInput = document.getElementsByName("Cijena")[index];
-                    const bonusInfoInput = document.getElementsByName("BonusInfo")[index];
+                    {Array.from({ length: numberOfTickets }).map((_, index) => {
+                    const karta = document.getElementsByName("Karta"+index)[0];
+                    const cijenaInput = document.getElementsByName("Cijena"+index)[0];
+                    const bonusInfoInput = document.getElementsByName("BonusInfo"+index)[0];
 
                     return (
                       <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
