@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from "./Input";
 
-const ChooseTickets = () => {
+const ChooseTickets = ({numberOfTickets}) => {
 
 
 const [isVisible, setIsVisible] = useState(false);
@@ -11,18 +11,34 @@ const [isVisible, setIsVisible] = useState(false);
   }
   const closeDiv = () => {
     setIsVisible(false);
+    setGrandTotal(0);
+    setTotals({});
   }
 
   const [totals, setTotals] = useState({});
   const [grandTotal, setGrandTotal] = useState(0);
 
-  const handleNumBoughtTicketsChange = (index, cijenaInput, value) => {
-    const newTotals = { ...totals };
-    newTotals[index] = Math.max(value * cijenaInput, 0);
-    setTotals(newTotals);
-    const newGrandTotal = Object.values(newTotals).reduce((acc, curr) => acc + (curr || 0), 0);
-    setGrandTotal(Math.max(parseFloat(newGrandTotal.toFixed(2)),0));
+  const handleNumBoughtTicketsChange = (index, cijenaInput, e, numTicketInput) => {
+    let value = Number(e.target.value);
+  
+    if (value > numTicketInput) value = numTicketInput;
+    if (value < 0) value = 0;
+  
+    console.log(`Index: ${index}, Clamped Value: ${value}, Cijena: ${cijenaInput}`);
+  
+    setTotals((prevTotals) => {
+      const newTotals = { ...prevTotals, [index]: value * cijenaInput };
+      console.log("Updated Totals:", newTotals);
+      return newTotals;
+    });
   };
+  
+  useEffect(() => {
+    const newGrandTotal = Object.values(totals).reduce((acc, curr) => acc + (curr || 0), 0);
+    console.log("Updated Grand Total:", newGrandTotal);
+    setGrandTotal(Math.max(parseFloat(newGrandTotal.toFixed(2)), 0));
+  }, [totals]);
+  
 
   return(
     <div>
@@ -38,17 +54,18 @@ const [isVisible, setIsVisible] = useState(false);
                   &times;
                 </button>
               </div>
-              {Array.from(document.getElementsByName("Karta")).map((karta, index) => {
-                    const cijenaInput = Number(document.getElementsByName("Cijena")[index]?.value);
-                    const numTicketInput = document.getElementsByName("NumTickets")[index]?.value;
+              {Array.from({ length: numberOfTickets }).map((_, index) => {
+                    const karta = document.getElementsByName("Karta"+index)[0];
+                    const cijenaInput = Number(document.getElementsByName("Cijena"+index)[0]?.value);
+                    const numTicketInput = document.getElementsByName("NumTickets"+index)[0]?.value;
 
                     return (
                       <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 bg-white justify-center items-center w-[100%]">
                         <div className='flex flex-row justify-between items-center w-full'>
                           <span className="font-bold text-xl text-black ml-3 mb-2">{karta?.value}</span>
-                          <Input name="NumBoughtTickets" fieldType="number" defaultValue={0} labelText="Količina" minValue={0} maxValue={numTicketInput} size="8rem" 
+                          <Input name="NumBoughtTickets" fieldType="number" labelText="Količina" defaultValue={0} minValue={0} maxValue={numTicketInput} size="8rem" 
                             onChange={(e) =>
-                              handleNumBoughtTicketsChange(index, cijenaInput, Number(e.target.value))
+                              handleNumBoughtTicketsChange(index, cijenaInput, e, numTicketInput)
                             }>
                           </Input>
                         </div>
