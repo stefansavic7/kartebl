@@ -24,18 +24,14 @@ const [isVisible, setIsVisible] = useState(false);
     if (value > numTicketInput) value = numTicketInput;
     if (value < 0) value = 0;
   
-    console.log(`Index: ${index}, Clamped Value: ${value}, Cijena: ${cijenaInput}`);
-  
     setTotals((prevTotals) => {
       const newTotals = { ...prevTotals, [index]: value * cijenaInput };
-      console.log("Updated Totals:", newTotals);
       return newTotals;
     });
   };
   
   useEffect(() => {
     const newGrandTotal = Object.values(totals).reduce((acc, curr) => acc + (curr || 0), 0);
-    console.log("Updated Grand Total:", newGrandTotal);
     setGrandTotal(Math.max(parseFloat(newGrandTotal.toFixed(2)), 0));
   }, [totals]);
   
