@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
-import RibljaCorba from "../assets/RibljaCorba.jpg";
-import Zdravko from "../assets/Zdravko.jpeg";
+import AdminEventHandle from "../components/AdminEventHandle";
 
 export const EventList = () => {
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -21,6 +21,9 @@ export const EventList = () => {
           id: event.id,
           name: event.naziv,
           date: event.datum,
+          time: event.vrijeme,
+          description: event.opis,
+          location: event.lokacija,
           image: event.slika 
             ? `data:${event.tip_slike};base64,${event.slika}` 
             : "default-image.jpg",
@@ -62,7 +65,8 @@ export const EventList = () => {
                   <h2 className="text-xl font-semibold">{event.name}</h2>
                   <p className="text-gray-600">Datum: {event.date}</p>
                   <button 
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600">
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600" 
+                    onClick={() => setSelectedEvent(event)}>
                     Pogledaj
                   </button>
                 </div>
@@ -71,6 +75,10 @@ export const EventList = () => {
           ))}
         </div>
       </div>
+
+      {selectedEvent && (
+        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent}/>
+      )}
     </div>
   );
 };
