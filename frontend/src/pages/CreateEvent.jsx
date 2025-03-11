@@ -241,7 +241,6 @@ const CreateEvent = ()=>{
                 
             </div>
             {isVisible&&(
-              <div className="mt-[5rem]">
               <EventPreview
                 isVisible={isVisible}
                 closeDiv={closeDiv}
@@ -253,7 +252,6 @@ const CreateEvent = ()=>{
                 opis={document.getElementsByName("Opis")[0]?.value}
                 numberOfTickets={numberOfTickets}
               />
-              </div>
             )}
         </div>
 

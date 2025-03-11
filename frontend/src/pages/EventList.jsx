@@ -19,15 +19,19 @@ export const EventList = () => {
 
         const mappedEvents = response.data.map(event => ({
           id: event.id,
-          name: event.naziv,
-          date: event.datum,
-          time: event.vrijeme,
-          description: event.opis,
-          location: event.lokacija,
-          image: event.slika 
-            ? `data:${event.tip_slike};base64,${event.slika}` 
+          naziv: event.naziv,
+          datum: event.datum,
+          vrijeme: event.vrijeme,
+          opis: event.opis,
+          lokacija: event.lokacija,
+          slika: event.slika 
+            ? `data:${event.tipSlike};base64,${event.slika}` 
             : "default-image.jpg",
-          approved: event.odobren,
+          databasePicture: event.slika,
+          type: event.tipSlike,
+          odobren: event.odobren,
+          organizatorId: event.organizatorId,
+          administratorId: event.administratorId,
         }));
 
         setEvents(mappedEvents);
@@ -39,6 +43,20 @@ export const EventList = () => {
     fetchEvents();
   }, []);
 
+  const updateEvent = (updatedEvent) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    );
+  };
+
+  const removeEvent = (deletedEvent)=> {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event.id !== deletedEvent.id)
+    );
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-4">
@@ -47,23 +65,23 @@ export const EventList = () => {
           {events.map((event) => (
             <div
               key={event.id}
-              className={`bg-white shadow-lg rounded-2xl overflow-hidden ${event.approved ? 'border border-green-500' : ''}`}
+              className={`bg-white shadow-lg rounded-2xl overflow-hidden ${event.odobren ? 'border border-green-500' : ''}`}
             >
               <div className="flex flex-col sm:flex-row">
                 <img 
-                  src={event.image} 
-                  alt={`Slika ${event.name}`} 
+                  src={event.slika} 
+                  alt={`Slika ${event.naziv}`} 
                   className="w-full sm:w-32 h-32 object-cover">
                 </img>
-                <div className={`p-4 flex-1 relative ${event.approved ? 'bg-green-100' : ''}`}>
-                  {event.approved && (
+                <div className={`p-4 flex-1 relative ${event.odobren ? 'bg-green-100' : ''}`}>
+                  {event.odobren===1 && (
                     <div className="absolute top-1 right-1 text-green-500 font-bold text-sm opacity-80">
                     Odobren
                   </div>
                   
                   )}
-                  <h2 className="text-xl font-semibold">{event.name}</h2>
-                  <p className="text-gray-600">Datum: {event.date}</p>
+                  <h2 className="text-xl font-semibold">{event.naziv}</h2>
+                  <p className="text-gray-600">Datum: {event.datum}</p>
                   <button 
                     className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600" 
                     onClick={() => setSelectedEvent(event)}>
@@ -77,7 +95,7 @@ export const EventList = () => {
       </div>
 
       {selectedEvent && (
-        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent}/>
+        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent} updateEvent={updateEvent} removeEvent={removeEvent}/>
       )}
     </div>
   );
