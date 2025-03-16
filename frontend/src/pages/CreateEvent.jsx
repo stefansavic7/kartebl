@@ -1,9 +1,7 @@
 import Input from "../components/Input"; 
-import Footer from "../components/Footer";
 import Event from "../components/Event";
 import EventPreview from "../components/EventPreview";
-import React, { useState, useEffect } from "react";
-import ChooseTickets from "../components/ChooseTickets";
+import React, { useState} from "react";
 
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Event from "../components/Event";
 
-const Home = () => {
+const Home = ({ updateRoutes }) => {
   const [events, setEvents] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -22,25 +22,31 @@ const Home = () => {
       });
   };
 
+  useEffect(() => {
+    events.forEach((event) => {
+      if(event.odobren === true)
+        updateRoutes(event.id);
+    });
+  }, [events, updateRoutes]);
+
   return (
     <div className="flex flex-wrap justify-center items-center">
       {events.length > 0 ? (
-        events.map((event, index) => {
-          
-          return (
+        events.map((event, index) => (
+          (event.odobren === true) && (
             <Event
+              id={event.id}
               key={index}
-              Picture={`data:image/jpeg;base64,${event.slika}`} // Pass the valid image here
+              Picture={`data:image/jpeg;base64,${event.slika}`}
               Title={event.naziv}
               Location={event.lokacija}
-              Date={event.datum.split('-').reverse().join('.') + '.' + " u " + event.vrijeme.slice(0, 5) + "h"}
+              Date={`${event.datum.split('-').reverse().join('.')} u ${event.vrijeme.slice(0, 5)}h`}
             />
-          );
-        })
+          ))
+        )
       ) : (
-        <p>No events available</p>
+        <p>Loading events</p>
       )}
-
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
     </div>
   );

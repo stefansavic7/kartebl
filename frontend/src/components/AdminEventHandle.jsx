@@ -127,7 +127,7 @@ const AdminEventHandle = ({ isVisible, setIsVisible , event, updateEvent , remov
                 vrijeme={event.vrijeme.slice(0, 5)}
                 opis={event.opis}
                 numberOfTickets={0}  //temp
-                marginTopValue={10}
+                marginTopValue={0}
               />
             )}
             {isApproveVisable && (

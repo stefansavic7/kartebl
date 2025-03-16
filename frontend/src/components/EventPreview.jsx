@@ -5,7 +5,7 @@ const EventPreview = ({ isVisible,closeDiv,naslov,showIMG,lokacija,datum,vrijeme
     return(
         <div >
             {isVisible && (
-              <div className={`fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-40 mt-${marginTopValue}`}>
+              <div className={`fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 mt-${marginTopValue}`}>
                 <div className=" w-full h-full bg-white shadow-lg overflow-y-auto z-30 flex flex-col items-center justify-start">
                   <button  onClick={closeDiv} className="text-gray-500 hover:text-gray-800 text-2xl z-50 ml-[90rem] text-3xl mt-5">
                     <b>&times;</b>
