@@ -4,6 +4,7 @@ import axios from "axios";
 import RibljaCorba from "../assets/RibljaCorba.jpg";
 import Zdravko from "../assets/Zdravko.jpeg";
 
+//ovoj komponenti pristupa administrator.
 export const EventList = () => {
   const [events, setEvents] = useState([]);
 
