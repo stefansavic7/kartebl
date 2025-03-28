@@ -11,7 +11,6 @@ public class KartaDto {
 
     private BigDecimal cijena;
 
-    private byte[] qr;
 
     private String vrstaKarte;
 

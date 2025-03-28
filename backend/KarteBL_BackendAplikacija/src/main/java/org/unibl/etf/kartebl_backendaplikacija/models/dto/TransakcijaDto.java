@@ -27,6 +27,8 @@ public class TransakcijaDto {
 
     private Integer skeniranaKartaId;
 
+    private byte[] qr;
+
 
 
 }

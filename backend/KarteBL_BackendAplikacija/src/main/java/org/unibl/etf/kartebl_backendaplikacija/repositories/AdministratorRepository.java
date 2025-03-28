@@ -6,4 +6,5 @@ import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEnti
 
 @Repository
 public interface AdministratorRepository extends JpaRepository<AdministratorEntity, Integer> {
+    AdministratorEntity findByEmail(String email);
 }

@@ -34,9 +34,7 @@ public class AdministratorEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "email", nullable = false, length = 255)
     private String email;
-    @OneToMany(mappedBy = "administrator")
-    @JsonIgnore
-    private List<AuthoritiesEntity> authorities;
+
     @OneToMany(mappedBy = "administrator")
     @JsonIgnore
     private List<DogadjajEntity> dogadjaji;

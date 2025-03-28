@@ -23,5 +23,8 @@ public class TransakcijaEntity implements BaseEntity<Integer>
     @OneToOne(mappedBy = "transakcija")
     @JsonIgnore
     private SkeniranaKartaEntity skeniranaKarta;
+    @Basic
+    @Column(name = "qr", nullable = true)
+    private byte[] qr;
     
 }
