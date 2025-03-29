@@ -28,9 +28,7 @@ public class OrganizatorEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "email", nullable = false, length = 255)
     private String email;
-    @OneToMany(mappedBy = "organizator")
-    @JsonIgnore
-    private List<AuthoritiesEntity> authorities;
+
     @OneToMany(mappedBy = "organizator")
     @JsonIgnore
     private List<DogadjajEntity> dogadjaji;

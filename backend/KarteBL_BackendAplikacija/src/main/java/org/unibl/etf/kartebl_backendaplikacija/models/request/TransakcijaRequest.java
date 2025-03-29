@@ -10,10 +10,9 @@ import org.unibl.etf.kartebl_backendaplikacija.models.entities.KorisnikEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.SkeniranaKartaEntity;
 
 @Data
-public class
-TransakcijaRequest
+public class TransakcijaRequest
 {
     private Integer korisnikId;
     private Integer kartaId;
-    private Integer skeniranaKartaId;
+
 }
