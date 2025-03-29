@@ -25,6 +25,9 @@ public class TransakcijaEntity implements BaseEntity<Integer>
     private SkeniranaKartaEntity skeniranaKarta;
     @Basic
     @Column(name = "qr", nullable = true)
-    private byte[] qr;
+    private String qr;
+    @Basic
+    @Column(name = "status", nullable = true)
+    private String status;
     
 }

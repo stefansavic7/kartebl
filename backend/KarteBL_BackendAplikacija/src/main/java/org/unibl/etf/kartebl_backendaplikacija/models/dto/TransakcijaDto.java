@@ -19,6 +19,8 @@ public class TransakcijaDto {
 
     private String korisnikKorisnickoIme;
 
+    private String korisnikEmail;
+
     private BigDecimal kartaCijena;
 
     private String kartaVrstaKarte;
@@ -27,7 +29,9 @@ public class TransakcijaDto {
 
     private Integer skeniranaKartaId;
 
-    private byte[] qr;
+    private String qr;
+
+    private String status;
 
 
 
