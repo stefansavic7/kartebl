@@ -1,5 +1,6 @@
 package org.unibl.etf.kartebl_backendaplikacija.repositories;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,5 @@ public interface PorukaRepository  extends JpaRepository<PorukaEntity, Integer> 
 
     @Modifying
     @Query("UPDATE PorukaEntity p SET p.procitana = true WHERE p.id = :id")
-    int setBooleanColumnToTrue(@Param("id") Long id);
+    int setBooleanColumnToTrue(@Param("id") Integer id);
 }

@@ -1,6 +1,7 @@
 package org.unibl.etf.kartebl_backendaplikacija.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,10 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudController;
 import org.unibl.etf.kartebl_backendaplikacija.exceptions.NotFoundException;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.DogadjajDto;
+import org.unibl.etf.kartebl_backendaplikacija.models.dto.TransakcijaDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.DogadjajEntity;
+import org.unibl.etf.kartebl_backendaplikacija.models.entities.TransakcijaEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.request.DogadjajRequest;
 import org.unibl.etf.kartebl_backendaplikacija.models.single_dto.SingleDogadjajDto;
 import org.unibl.etf.kartebl_backendaplikacija.services.DogadjajService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/dogadjaji")
@@ -47,6 +52,12 @@ public class DogadjajController extends CrudController<Integer, DogadjajRequest,
     public DogadjajDto update(@PathVariable Integer id, @RequestPart  DogadjajRequest podaci, @RequestPart MultipartFile slika) throws NotFoundException
     {
         return dogadjajService.update(id, podaci, slika);
+    }
+
+    @GetMapping("/karteZaDogadjaj/{id}")
+    public List<TransakcijaDto> getTransakcijeZaDogadjaj(@PathVariable Integer id)
+    {
+        return dogadjajService.getTransakcijeZaDogadjaj(id);
     }
 
 

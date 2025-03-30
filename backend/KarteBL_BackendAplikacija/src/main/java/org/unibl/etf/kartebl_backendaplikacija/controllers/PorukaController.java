@@ -1,9 +1,6 @@
 package org.unibl.etf.kartebl_backendaplikacija.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudController;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.OrganizatorDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.PorukaEntity;
@@ -30,5 +27,11 @@ public class PorukaController extends CrudController<Integer, PorukaRequest, Por
     public List<PorukaEntity> getPoruke(@PathVariable String emailPosiljaoca, @PathVariable String emailPrimaoca)
     {
         return porukaService.vratiPoruke(emailPosiljaoca, emailPrimaoca);
+    }
+
+    @PostMapping("/setPorukaProcitana/{id}")
+    public void setPorukaProcitana_true(@PathVariable(value = "id") Integer idPoruke)
+    {
+        porukaService.setPorukaProcitana_true(idPoruke);
     }
 }
