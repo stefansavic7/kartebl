@@ -23,4 +23,9 @@ public class PorukaServiceImpl extends CrudJpaService<PorukaEntity, Integer> imp
     public List<PorukaEntity> vratiPoruke(String emailPosiljaoca, String emailPrimaoca) {
         return porukaRepository.findAllByEmailPosiljaocaAndEmailPrimaoca(emailPosiljaoca, emailPrimaoca);
     }
+
+    @Override
+    public void setPorukaProcitana_true(Integer idPoruke) {
+        porukaRepository.setBooleanColumnToTrue(idPoruke);
+    }
 }
