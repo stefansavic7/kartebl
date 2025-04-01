@@ -7,7 +7,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudJpaService;
 import org.unibl.etf.kartebl_backendaplikacija.exceptions.NotFoundException;
+import org.unibl.etf.kartebl_backendaplikacija.models.dto.AdministratorDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
+import org.unibl.etf.kartebl_backendaplikacija.models.single_dto.SingleAdministratorDto;
 import org.unibl.etf.kartebl_backendaplikacija.repositories.AdministratorRepository;
 import org.unibl.etf.kartebl_backendaplikacija.services.AdministratorService;
 
@@ -46,5 +48,10 @@ public class AdministratorServiceImpl extends CrudJpaService<AdministratorEntity
         entity = repository.saveAndFlush(entity);
         entityManager.refresh(entity);
         return modelMapper.map(entity, resultDtoClass);
+    }
+
+
+    public SingleAdministratorDto findByEmail(String email) {
+        return modelMapper.map(repository.findByEmail(email), SingleAdministratorDto.class);
     }
 }

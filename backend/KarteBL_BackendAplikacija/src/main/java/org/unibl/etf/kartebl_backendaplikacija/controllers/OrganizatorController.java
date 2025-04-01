@@ -1,5 +1,7 @@
 package org.unibl.etf.kartebl_backendaplikacija.controllers;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudController;
@@ -16,5 +18,11 @@ public class OrganizatorController extends CrudController<Integer, OrganizatorRe
 
     public OrganizatorController(Organizatorservice organizatorservice) {
         super(organizatorservice, OrganizatorDto.class, SingleOrganizatorDto.class);
+        this.organizatorservice = organizatorservice;
+    }
+
+    @GetMapping("/email/{email}")
+    public SingleOrganizatorDto getOrganizatorByEmail(@PathVariable String email) {
+        return organizatorservice.findByEmail(email);
     }
 }

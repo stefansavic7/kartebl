@@ -9,6 +9,7 @@ import org.unibl.etf.kartebl_backendaplikacija.base.CrudJpaService;
 import org.unibl.etf.kartebl_backendaplikacija.exceptions.NotFoundException;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.OrganizatorEntity;
+import org.unibl.etf.kartebl_backendaplikacija.models.single_dto.SingleOrganizatorDto;
 import org.unibl.etf.kartebl_backendaplikacija.repositories.OrganizatorRepository;
 import org.unibl.etf.kartebl_backendaplikacija.services.Organizatorservice;
 
@@ -47,5 +48,10 @@ public class OrganizatorServiceImpl extends CrudJpaService<OrganizatorEntity, In
         entity = organizatorRepository.saveAndFlush(entity);
         entityManager.refresh(entity);
         return modelMapper.map(entity, resultDtoClass);
+    }
+
+    @Override
+    public SingleOrganizatorDto findByEmail(String email) {
+        return modelMapper.map(organizatorRepository.findByEmail(email), SingleOrganizatorDto.class);
     }
 }

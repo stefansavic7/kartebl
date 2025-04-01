@@ -31,9 +31,7 @@ public class KorisnikEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "prezime", nullable = true, length = 50)
     private String prezime;
-    @OneToMany(mappedBy = "korisnik")
-    @JsonIgnore
-    private List<AuthoritiesEntity> authorities;
+
     @OneToMany(mappedBy = "korisnik")
     @JsonIgnore
     private List<TransakcijaEntity> transakcije;

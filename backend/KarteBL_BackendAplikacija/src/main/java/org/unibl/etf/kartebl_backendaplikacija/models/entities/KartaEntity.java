@@ -21,9 +21,7 @@ public class KartaEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "cijena", nullable = false, precision = 2)
     private BigDecimal cijena;
-    @Basic
-    @Column(name = "qr", nullable = true)
-    private byte[] qr;
+
     @Basic
     @Column(name = "vrsta_karte", nullable = true, length = 100)
     private String vrstaKarte;
