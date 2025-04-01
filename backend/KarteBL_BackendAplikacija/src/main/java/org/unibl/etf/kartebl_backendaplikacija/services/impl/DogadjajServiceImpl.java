@@ -15,6 +15,7 @@ import org.unibl.etf.kartebl_backendaplikacija.models.request.DogadjajRequest;
 import org.unibl.etf.kartebl_backendaplikacija.repositories.DogadjajRepository;
 import org.unibl.etf.kartebl_backendaplikacija.services.DogadjajService;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,19 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         dogadjaj.setTipSlike(slika.getContentType());
         try {
             byte[] slikaFile = slika.getBytes();
-            dogadjaj.setSlika(slikaFile);
             dogadjaj=dogadjajRepository.saveAndFlush(dogadjaj);
+            String ekstenzija="";
+            if(slika.getContentType().equals("image/jpeg"))
+                ekstenzija=".jpg";
+            else ekstenzija=".png";
+            dogadjaj.setPutanjaDoSlike("KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\"+dogadjaj.getId()+ekstenzija);
+            try{
+                FileOutputStream fileOutputStream=new FileOutputStream(dogadjaj.getPutanjaDoSlike());
+                fileOutputStream.write(slikaFile,0,slikaFile.length);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dogadjajRepository.save(dogadjaj);
             DogadjajDto response = new DogadjajDto();
             modelMapper.map(dogadjaj, response);
             return response;
@@ -82,10 +94,18 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         dogadjaj.setOrganizator(organizatorEntity);
         dogadjaj.setOdobren(false);
         dogadjaj.setTipSlike(slika.getContentType());
+        String ekstenzija="";
+        if (slika.getContentType().equals("image/jpeg"))
+            ekstenzija=".jpg";
+        else ekstenzija=".png";
         try {
             byte[] slikaFile = slika.getBytes();
-            dogadjaj.setSlika(slikaFile);
             dogadjaj=dogadjajRepository.saveAndFlush(dogadjaj);
+            dogadjaj.setPutanjaDoSlike("KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\"+dogadjaj.getId()+ekstenzija);
+            dogadjajRepository.save(dogadjaj);
+            FileOutputStream fileOutputStream=new FileOutputStream(dogadjaj.getPutanjaDoSlike());
+            fileOutputStream.write( slikaFile,0,slikaFile.length);
+
             DogadjajDto response = new DogadjajDto();
             modelMapper.map(dogadjaj, response);
             return response;

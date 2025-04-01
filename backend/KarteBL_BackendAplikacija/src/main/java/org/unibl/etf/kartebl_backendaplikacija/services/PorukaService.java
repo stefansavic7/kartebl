@@ -10,4 +10,6 @@ import java.util.List;
 public interface PorukaService extends CrudService<Integer> {
     List<PorukaEntity> vratiPoruke(String emailPosiljaoca, String emailPrimaoca);
     void setPorukaProcitana_true(Integer idPoruke);
+    List<PorukaEntity> vratiPoslanePoruke(String email_posiljaoc);
+    List<PorukaEntity> vratiPrimljenePoruke(String email_primaoc);
 }
