@@ -19,9 +19,6 @@ public class DogadjajRequest {
 
     private String opis;
 
-    private byte[] slika;
-
-    private String tipSlike;
 
     private Integer administratorId;
 

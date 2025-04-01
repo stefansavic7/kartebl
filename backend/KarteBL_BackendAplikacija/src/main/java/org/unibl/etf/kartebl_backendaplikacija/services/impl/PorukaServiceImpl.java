@@ -28,4 +28,14 @@ public class PorukaServiceImpl extends CrudJpaService<PorukaEntity, Integer> imp
     public void setPorukaProcitana_true(Integer idPoruke) {
         porukaRepository.setBooleanColumnToTrue(idPoruke);
     }
+
+    @Override
+    public List<PorukaEntity> vratiPoslanePoruke(String email_posiljaoc) {
+        return porukaRepository.vratiPoslanePoruke(email_posiljaoc);
+    }
+
+    @Override
+    public List<PorukaEntity> vratiPrimljenePoruke(String email_primaoc) {
+        return porukaRepository.vratiPrimljenePoruke(email_primaoc);
+    }
 }

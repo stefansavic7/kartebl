@@ -18,4 +18,13 @@ public interface PorukaRepository  extends JpaRepository<PorukaEntity, Integer> 
     @Modifying
     @Query("UPDATE PorukaEntity p SET p.procitana = true WHERE p.id = :id")
     int setBooleanColumnToTrue(@Param("id") Integer id);
+
+    @Modifying
+    @Query("SELECT p FROM PorukaEntity p where p.emailPosiljaoca= :emailPosiljaoca")
+    List<PorukaEntity> vratiPoslanePoruke(@Param(value = "emailPosiljaoca")String emailPosiljaoca);
+
+    @Modifying
+    @Query("SELECT p FROM PorukaEntity p where p.emailPrimaoca= :emailPrimaoca")
+    List<PorukaEntity> vratiPrimljenePoruke(@Param(value = "emailPrimaoca")String emailPrimaoca);
+
 }
