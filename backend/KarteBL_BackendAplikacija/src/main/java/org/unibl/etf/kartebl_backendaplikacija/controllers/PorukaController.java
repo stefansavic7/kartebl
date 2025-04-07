@@ -34,4 +34,15 @@ public class PorukaController extends CrudController<Integer, PorukaRequest, Por
     {
         porukaService.setPorukaProcitana_true(idPoruke);
     }
+
+    @GetMapping("/chat/primljene/{emailPrimaoca}")
+    public List<PorukaEntity> vratiPrimljenePoruke(@PathVariable String emailPrimaoca)
+    {
+        return porukaService.vratiPrimljenePoruke(emailPrimaoca);
+    }
+    @GetMapping("/chat/poslane/{emailPosiljaoca}")
+    public List<PorukaEntity> vratiPoslanePoruke(@PathVariable String emailPosiljaoca)
+    {
+        return porukaService.vratiPoslanePoruke(emailPosiljaoca);
+    }
 }

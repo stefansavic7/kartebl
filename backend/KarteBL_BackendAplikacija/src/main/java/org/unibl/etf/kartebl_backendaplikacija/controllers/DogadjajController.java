@@ -19,6 +19,10 @@ import org.unibl.etf.kartebl_backendaplikacija.models.request.DogadjajRequest;
 import org.unibl.etf.kartebl_backendaplikacija.models.single_dto.SingleDogadjajDto;
 import org.unibl.etf.kartebl_backendaplikacija.services.DogadjajService;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -39,13 +43,15 @@ public class DogadjajController extends CrudController<Integer, DogadjajRequest,
     }
 
     @GetMapping("/dogadjaj/{id}/slika")
-    public ResponseEntity<byte[]> getSlika(@PathVariable Integer id) {
+    public ResponseEntity<byte[]> getSlikaZaDogadjaj(@PathVariable Integer id)throws Exception{
         SingleDogadjajDto dogadjaj = dogadjajService.findById(id, SingleDogadjajDto.class);
-        byte[] slika = dogadjaj.getSlika();
+
+        Path path= Paths.get(dogadjaj.getPutanjaDoSlike());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(dogadjaj.getTipSlike()));  // ili odgovarajući tip slike (PNG, GIF...)
-        return new ResponseEntity<>(slika, headers, HttpStatus.OK);
+        return new ResponseEntity<>(Files.readAllBytes(path), headers, HttpStatus.OK);
+
     }
 
     @PutMapping("/updateDogadjaj/{id}")
@@ -54,7 +60,7 @@ public class DogadjajController extends CrudController<Integer, DogadjajRequest,
         return dogadjajService.update(id, podaci, slika);
     }
 
-    @GetMapping("/karteZaDogadjaj/{id}")
+    @GetMapping("/transakcijeZaDogadjaj/{id}")
     public List<TransakcijaDto> getTransakcijeZaDogadjaj(@PathVariable Integer id)
     {
         return dogadjajService.getTransakcijeZaDogadjaj(id);

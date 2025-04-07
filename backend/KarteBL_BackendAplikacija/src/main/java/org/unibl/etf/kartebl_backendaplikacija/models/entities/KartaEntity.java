@@ -21,6 +21,12 @@ public class KartaEntity implements BaseEntity<Integer>
     @Basic
     @Column(name = "cijena", nullable = false, precision = 2)
     private BigDecimal cijena;
+    @Basic
+    @Column(name ="max_broj_karata")
+    private Integer maxBrojKarata;
+    @Basic
+    @Column(name = "broj_prodatih_karata")
+    private Integer brojProdatihKarata=0;
 
     @Basic
     @Column(name = "vrsta_karte", nullable = true, length = 100)

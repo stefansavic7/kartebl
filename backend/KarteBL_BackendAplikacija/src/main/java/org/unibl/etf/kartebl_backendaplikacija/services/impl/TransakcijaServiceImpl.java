@@ -2,9 +2,11 @@ package org.unibl.etf.kartebl_backendaplikacija.services.impl;
 
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudJpaService;
 import org.unibl.etf.kartebl_backendaplikacija.component.QRCodeGenerator;
+import org.unibl.etf.kartebl_backendaplikacija.exceptions.BadRequestException;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.TransakcijaDto;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.KartaEntity;
 import org.unibl.etf.kartebl_backendaplikacija.models.entities.KorisnikEntity;
@@ -49,27 +51,32 @@ public class TransakcijaServiceImpl extends CrudJpaService<TransakcijaEntity, In
 
     @Override
     public TransakcijaDto generate(TransakcijaRequest transakcijaRequest) throws Exception {
-        TransakcijaEntity transakcijaEntity = modelMapper.map(transakcijaRequest, TransakcijaEntity.class);
-        transakcijaEntity.setStatus("ACTIVE");
-        transakcijaEntity.setQr(generateTicketCode());
-        KorisnikEntity korisnik = korisnikRepository.findById(transakcijaRequest.getKorisnikId())
-                .orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
+        int brojProdatihKarata= kartaRepository.getBrojProdatihKarata(transakcijaRequest.getKartaId());
+        int maxBrojKarata=kartaRepository.getMaxBrojKarata(transakcijaRequest.getKartaId());
+        if (brojProdatihKarata<maxBrojKarata) {
+            kartaRepository.updateBrojProdatihKarata(transakcijaRequest.getKartaId(), ++brojProdatihKarata);
+            TransakcijaEntity transakcijaEntity = modelMapper.map(transakcijaRequest, TransakcijaEntity.class);
+            transakcijaEntity.setStatus("ACTIVE");
+            transakcijaEntity.setQr(generateTicketCode());
+            KorisnikEntity korisnik = korisnikRepository.findById(transakcijaRequest.getKorisnikId())
+                    .orElseThrow(() ->  new BadRequestException(HttpStatus.NOT_FOUND,"Korisnik nije pronadjen!"));
 
-        KartaEntity karta = kartaRepository.findById(transakcijaRequest.getKartaId())
-                .orElseThrow(() -> new RuntimeException("Karta nije pronađena"));
-
-
-        transakcijaEntity.setKorisnik(korisnik);
-        transakcijaEntity.setKarta(karta);
-        byte[] pngData= qrCodeGenerator.getQRCode(transakcijaEntity.getQr(),200,200);
-
-        String content="Primili ste ovaj mejl zato sto ste narucili kartu preko stranice KarteBl";
-        emailService.sendEmail(transakcijaEntity.getKorisnik().getEmail(),"ISCON 2023 - TICKET CONFIRMATION",content,pngData,
-                transakcijaEntity.getKorisnik().getIme()+"_"+transakcijaEntity.getKorisnik().getPrezime()+".pdf",
-                transakcijaEntity.getKorisnik().getIme(),transakcijaEntity.getKorisnik().getPrezime(),transakcijaEntity.getQr(), transakcijaEntity.getKarta().getVrstaKarte());
+            KartaEntity karta = kartaRepository.findById(transakcijaRequest.getKartaId())
+                    .orElseThrow(() -> new BadRequestException(HttpStatus.NOT_FOUND,"Karta nije pronadjena!"));
 
 
-        return modelMapper.map(transakcijaRepository.saveAndFlush(transakcijaEntity), TransakcijaDto.class);
+            transakcijaEntity.setKorisnik(korisnik);
+            transakcijaEntity.setKarta(karta);
+            byte[] pngData = qrCodeGenerator.getQRCode(transakcijaEntity.getQr(), 200, 200);
+
+            String content = "Primili ste ovaj mejl zato sto ste narucili kartu preko stranice KarteBl";
+            emailService.sendEmail(transakcijaEntity.getKorisnik().getEmail(), "KarteBL 2023 - TICKET CONFIRMATION", content, pngData,
+                    transakcijaEntity.getKorisnik().getIme() + "_" + transakcijaEntity.getKorisnik().getPrezime() + ".pdf",
+                    transakcijaEntity.getKorisnik().getIme(), transakcijaEntity.getKorisnik().getPrezime(), transakcijaEntity.getQr(), transakcijaEntity.getKarta().getVrstaKarte());
+
+
+            return modelMapper.map(transakcijaRepository.saveAndFlush(transakcijaEntity), TransakcijaDto.class);
+        }else throw new BadRequestException(HttpStatus.BAD_REQUEST,"Nema vise slobodnih karata za odabrani dogadjaj!");
 
     }
 

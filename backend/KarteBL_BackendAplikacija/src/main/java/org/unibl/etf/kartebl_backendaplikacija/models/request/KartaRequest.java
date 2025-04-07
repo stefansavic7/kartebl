@@ -13,4 +13,6 @@ public class KartaRequest {
 
     int dogadjajId;
 
+    int maxBrojKarata;
+
 }

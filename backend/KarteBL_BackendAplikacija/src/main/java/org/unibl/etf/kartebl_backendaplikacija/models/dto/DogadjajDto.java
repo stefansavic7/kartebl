@@ -21,7 +21,7 @@ public class DogadjajDto {
 
     private String opis;
 
-    private byte[] slika;
+    private String putanjaDoSlike;
 
     private String tipSlike;
 

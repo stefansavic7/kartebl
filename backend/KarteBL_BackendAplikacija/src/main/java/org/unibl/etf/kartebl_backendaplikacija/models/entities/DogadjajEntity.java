@@ -41,7 +41,7 @@ public class DogadjajEntity implements BaseEntity<Integer>
 
     @Basic
     @Column(name = "slika", nullable = true)
-    private byte[] slika;
+    private String putanjaDoSlike;
 
     @Column(name = "odobren")
     private boolean odobren;

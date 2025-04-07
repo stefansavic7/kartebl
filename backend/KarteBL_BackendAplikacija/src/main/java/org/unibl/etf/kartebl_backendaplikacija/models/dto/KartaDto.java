@@ -11,12 +11,15 @@ public class KartaDto {
 
     private BigDecimal cijena;
 
+    private Integer brojProdatihKarata;
 
     private String vrstaKarte;
 
     private String dogadjajOpis;
 
     private String organizatorKorisnickoIme;
+
+    private Integer maxBrojKarata;
 
 
 }
