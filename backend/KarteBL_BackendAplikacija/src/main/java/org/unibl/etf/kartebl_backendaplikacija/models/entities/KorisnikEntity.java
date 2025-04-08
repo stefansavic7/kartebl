@@ -42,8 +42,6 @@ public class KorisnikEntity implements BaseEntity<Integer>
         this.email = user.getEmail();
         this.sifra = user.getPassword();
         this.korisnickoIme = user.getKorisnickoIme();
-        
-        //TODO: authority dodaj
     }
     
     public KorisnikEntity()
