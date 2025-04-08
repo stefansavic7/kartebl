@@ -9,12 +9,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.unibl.etf.kartebl_backendaplikacija.base.CrudJpaService;
 import org.unibl.etf.kartebl_backendaplikacija.exceptions.NotFoundException;
 import org.unibl.etf.kartebl_backendaplikacija.models.dto.DogadjajDto;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.AdministratorEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.DogadjajEntity;
-import org.unibl.etf.kartebl_backendaplikacija.models.entities.OrganizatorEntity;
+import org.unibl.etf.kartebl_backendaplikacija.models.dto.TransakcijaDto;
+import org.unibl.etf.kartebl_backendaplikacija.models.entities.*;
 import org.unibl.etf.kartebl_backendaplikacija.models.request.DogadjajRequest;
 import org.unibl.etf.kartebl_backendaplikacija.repositories.DogadjajRepository;
 import org.unibl.etf.kartebl_backendaplikacija.services.DogadjajService;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer> implements DogadjajService
@@ -48,8 +51,19 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         dogadjaj.setTipSlike(slika.getContentType());
         try {
             byte[] slikaFile = slika.getBytes();
-            dogadjaj.setSlika(slikaFile);
             dogadjaj=dogadjajRepository.saveAndFlush(dogadjaj);
+            String ekstenzija="";
+            if(slika.getContentType().equals("image/jpeg"))
+                ekstenzija=".jpg";
+            else ekstenzija=".png";
+            dogadjaj.setPutanjaDoSlike("KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\"+dogadjaj.getId()+ekstenzija);
+            try{
+                FileOutputStream fileOutputStream=new FileOutputStream(dogadjaj.getPutanjaDoSlike());
+                fileOutputStream.write(slikaFile,0,slikaFile.length);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dogadjajRepository.save(dogadjaj);
             DogadjajDto response = new DogadjajDto();
             modelMapper.map(dogadjaj, response);
             return response;
@@ -80,10 +94,18 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         dogadjaj.setOrganizator(organizatorEntity);
         dogadjaj.setOdobren(false);
         dogadjaj.setTipSlike(slika.getContentType());
+        String ekstenzija="";
+        if (slika.getContentType().equals("image/jpeg"))
+            ekstenzija=".jpg";
+        else ekstenzija=".png";
         try {
             byte[] slikaFile = slika.getBytes();
-            dogadjaj.setSlika(slikaFile);
             dogadjaj=dogadjajRepository.saveAndFlush(dogadjaj);
+            dogadjaj.setPutanjaDoSlike("KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\"+dogadjaj.getId()+ekstenzija);
+            dogadjajRepository.save(dogadjaj);
+            FileOutputStream fileOutputStream=new FileOutputStream(dogadjaj.getPutanjaDoSlike());
+            fileOutputStream.write( slikaFile,0,slikaFile.length);
+
             DogadjajDto response = new DogadjajDto();
             modelMapper.map(dogadjaj, response);
             return response;
@@ -96,6 +118,34 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
 
     }
 
+    @Override
+    public List<TransakcijaDto> getTransakcijeZaDogadjaj(Integer id) {
+        DogadjajEntity dogadjaj = dogadjajRepository.findById(id).orElseThrow(()->new NotFoundException("Dogadjaj sa id-em "+id+" ne postoji."));
+        List<KartaEntity> kartaEntities=dogadjaj.getKarte();
+        List<TransakcijaDto> transakcije=new ArrayList<>();
+
+        for (KartaEntity karta:kartaEntities)
+        {
+            List<TransakcijaDto> pomocnaLista=new ArrayList<>();
+            pomocnaLista=gettransakcijeZaVrstuKarte(karta.getId());
+            for (TransakcijaDto transakcijaDto:pomocnaLista)
+                transakcije.add(transakcijaDto);
+        }
+        return transakcije;
+
+    }
+
+    @Override
+    public List<TransakcijaDto> gettransakcijeZaVrstuKarte(Integer idKarte) {
+
+        List<TransakcijaEntity> transakcijaEntities=dogadjajRepository.getAllTransakcijaEntityByKarta(idKarte);
+        List<TransakcijaDto> transakcijaDtos=new ArrayList<>();
+        for (TransakcijaEntity transakcijaEntity : transakcijaEntities) {
+            TransakcijaDto transakcijaDto=modelMapper.map(transakcijaEntity, TransakcijaDto.class);
+            transakcijaDtos.add(transakcijaDto);
+        }
+        return transakcijaDtos;
+    }
 
 
 }

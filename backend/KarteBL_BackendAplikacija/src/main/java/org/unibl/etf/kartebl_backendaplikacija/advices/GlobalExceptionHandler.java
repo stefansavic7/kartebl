@@ -6,6 +6,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.HandlerMethod;
+import org.unibl.etf.kartebl_backendaplikacija.exceptions.BadRequestException;
 import org.unibl.etf.kartebl_backendaplikacija.exceptions.HttpException;
 
 @ControllerAdvice
@@ -27,5 +28,10 @@ public class GlobalExceptionHandler
     public final ResponseEntity<Object> handleException(Exception e, HandlerMethod handlerMethod)
     {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
+        // Vraća se odgovarajuća poruka i HTTP status 400
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

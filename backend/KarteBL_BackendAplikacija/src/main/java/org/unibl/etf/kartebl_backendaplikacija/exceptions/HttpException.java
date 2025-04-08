@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public class HttpException extends RuntimeException {
 
     private HttpStatus status;
+    private String message;
     private Object data;
 
     public HttpException() {
@@ -25,6 +26,11 @@ public class HttpException extends RuntimeException {
     public HttpException(HttpStatus status, Object data) {
         this.status = status;
         this.data = data;
+    }
+    public HttpException(HttpStatus status, String message) {
+       this.message=message;
+        this.status = status;
+        this.data = null;
     }
 
 }

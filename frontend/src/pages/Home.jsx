@@ -1,66 +1,55 @@
-import Event from "../components/Event";
-import Zdravko from "../assets/zdravko.jpeg";
-import RibljaCorba from "../assets/RibljaCorba.jpg";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useState } from "react";
+import Event from "../components/Event";
 
+const Home = ({ updateRoutes }) => {
+  const [events, setEvents] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
 
+  const fetchAllEvents = () => {
+    axios
+      .get('http://localhost:9000/dogadjaji')
+      .then((response) => {
+        setEvents(response.data);
+        setErrorMessage('');
+      })
+      .catch((error) => {
+        setErrorMessage('An error occurred while fetching events.');
+      });
+  };
 
- 
-const Home = () => {
-   // Initialize adminId as a number
-   /*
-   const [adminId, setAdminId] = useState('');
-   const [adminName, setAdminName] = useState('');
-   const [errorMessage, setErrorMessage] = useState('');
- 
-   const handleInputChange = (e) => {
-     const id = e.target.value;
- 
-     // Only set the adminId if the input is a valid number
-     if (id !== '' && !isNaN(id)) {
-       setAdminId(id);
-       fetchAdminName(id); // Fetch the admin data
-     } else {
-       setAdminId('');
-       setAdminName('');
-       setErrorMessage('');
-     }
-   };
- 
-   const fetchAdminName = (id) => {
-     axios
-       .get(`http://localhost:9000/dogadjaji/${id}`)
-       .then((response) => {
-         // Assuming 'naziv' is the admin name
-         setAdminName(response.data.naziv || '');
-         setErrorMessage(''); // Clear error message if successful
-       })
-       .catch((error) => {
-         if (error.response && error.response.status === 404) {
-           setAdminName('');
-           setErrorMessage('Not found');
-         } else {
-           setAdminName('');
-           setErrorMessage('An error occurred. Please try again.');
-         }
-       });
-     }
-       */
- 
-       
+  useEffect(() => {
+    events.forEach((event) => {
+      if(event.odobren === true)
+        updateRoutes(event.id);
+    });
+  }, [events, updateRoutes]);
+
   return (
     <div className="flex flex-wrap justify-center items-center">
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={RibljaCorba} Title="Koncert Riblje Corbe" Location="Akvana" Date="30.11.2025."></Event>
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={Zdravko} Title="Koncert Zdravka Colica" Location="Tvrdjava Kastel" Date="20.05.2025."></Event>
-      <Event Picture={RibljaCorba} Title="Koncert Riblje Corbe" Location="Akvana" Date="30.11.2025."></Event>
-
+      {events.length > 0 ? (
+        events.map((event, index) => (
+          (event.odobren === true) && (
+            <Event
+              id={event.id}
+              key={index}
+              Picture={`data:image/jpeg;base64,${event.slika}`}
+              Title={event.naziv}
+              Location={event.lokacija}
+              Date={`${event.datum.split('-').reverse().join('.')} u ${event.vrijeme.slice(0, 5)}h`}
+            />
+          ))
+        )
+      ) : (
+        <p>Loading events</p>
+      )}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
     </div>
-    
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

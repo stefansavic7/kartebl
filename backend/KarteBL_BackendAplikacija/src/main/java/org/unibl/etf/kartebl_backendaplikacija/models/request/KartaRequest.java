@@ -9,10 +9,10 @@ public class KartaRequest {
 
     private String vrstaKarte;
 
-    private byte[] qr;
-
     int organizatorId;
 
     int dogadjajId;
+
+    int maxBrojKarata;
 
 }
