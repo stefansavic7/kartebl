@@ -30,7 +30,6 @@ public class Users
         this.email = korisnikEntity.getEmail();
         this.password = korisnikEntity.getSifra();
         this.korisnickoIme = korisnikEntity.getKorisnickoIme();
-        // TODO: tip rijesi
     }
     
     public Users()

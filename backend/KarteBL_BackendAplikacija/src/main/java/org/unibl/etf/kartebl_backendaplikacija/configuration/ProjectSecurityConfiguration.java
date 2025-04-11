@@ -101,6 +101,9 @@ public class ProjectSecurityConfiguration {
                         .hasAnyRole("administrator", "korisnik")
                         .requestMatchers(HttpMethod.DELETE,"korisnici/**")
                         .hasAnyRole("administrator", "korisnik")
+        
+                        .requestMatchers(HttpMethod.GET,"organizatori/email/**")
+                        .hasAnyRole("administrator", "organizator")
                         
                         .anyRequest().authenticated())
                 .oauth2Login(Customizer.withDefaults())
