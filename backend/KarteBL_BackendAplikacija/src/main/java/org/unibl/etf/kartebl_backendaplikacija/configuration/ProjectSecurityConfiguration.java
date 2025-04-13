@@ -71,7 +71,7 @@ public class ProjectSecurityConfiguration {
                         .requestMatchers("login", "register")
                         .permitAll()
                         
-                        .requestMatchers("administratori/**", "organizatori/**", "skeniraneKarte/**") //TODO: za skenirane karte ce vjerovatno trebati novi korisnik koji ce takodje moci raditi get i post ili samo dodati u korisnika kolonu zaposleni koja ako je true moze skenirati
+                        .requestMatchers("administratori/**", "skeniraneKarte/**") //TODO: za skenirane karte ce vjerovatno trebati novi korisnik koji ce takodje moci raditi get i post ili samo dodati u korisnika kolonu zaposleni koja ako je true moze skenirati
                         .hasRole("administrator")
                         
                         .requestMatchers(HttpMethod.PUT,"transakcije/**")
@@ -102,7 +102,7 @@ public class ProjectSecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE,"korisnici/**")
                         .hasAnyRole("administrator", "korisnik")
         
-                        .requestMatchers(HttpMethod.GET,"organizatori/email/**")
+                        .requestMatchers(HttpMethod.GET, "organizatori/**")
                         .hasAnyRole("administrator", "organizator")
                         
                         .anyRequest().authenticated())
