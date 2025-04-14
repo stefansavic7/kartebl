@@ -47,7 +47,7 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         OrganizatorEntity organizatorEntity = new OrganizatorEntity();
         organizatorEntity.setId(podaci.getOrganizatorId());
         dogadjaj.setOrganizator(organizatorEntity);
-        dogadjaj.setOdobren(false);
+        dogadjaj.setOdobren(podaci.getOdobren());
         dogadjaj.setTipSlike(slika.getContentType());
         try {
             byte[] slikaFile = slika.getBytes();
@@ -92,7 +92,7 @@ public class DogadjajServiceImpl extends CrudJpaService<DogadjajEntity, Integer>
         OrganizatorEntity organizatorEntity = new OrganizatorEntity();
         organizatorEntity.setId(podaci.getOrganizatorId());
         dogadjaj.setOrganizator(organizatorEntity);
-        dogadjaj.setOdobren(false);
+        dogadjaj.setOdobren(podaci.getOdobren());
         dogadjaj.setTipSlike(slika.getContentType());
         String ekstenzija="";
         if (slika.getContentType().equals("image/jpeg"))

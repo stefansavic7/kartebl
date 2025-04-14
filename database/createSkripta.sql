@@ -65,7 +65,7 @@ CREATE TABLE `dogadjaj` (
   `opis` varchar(500) DEFAULT NULL,
   `administrator_id` int NOT NULL,
   `organizator_id` int NOT NULL,
-  `odobren` tinyint(1) NOT NULL,
+  `odobren` varchar(30) DEFAULT NULL,
   `tip_slike` varchar(10) NOT NULL,
   `slika` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -82,7 +82,7 @@ CREATE TABLE `dogadjaj` (
 
 LOCK TABLES `dogadjaj` WRITE;
 /*!40000 ALTER TABLE `dogadjaj` DISABLE KEYS */;
-INSERT INTO `dogadjaj` VALUES (8,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,0,'image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\8.jpg'),(11,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,0,'image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\11.jpg'),(13,'Koncert godine','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,0,'image/png','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\13.png'),(14,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,0,'image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\14.jpg');
+INSERT INTO `dogadjaj` VALUES (8,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,'aktivan','image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\8.jpg'),(11,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,'0','image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\11.jpg'),(13,'Koncert godine','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,'0','image/png','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\13.png'),(14,'Koncert godine testiranje .jpg ekstenzije','2025-04-01','20:00:00','Arena Beograd','Najveći koncert ove godine sa specijalnim gostima.',2,6,'0','image/jpeg','KarteBL_BackendAplikacija\\src\\main\\resources\\Slike\\14.jpg');
 /*!40000 ALTER TABLE `dogadjaj` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,4 +317,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:51:43
+-- Dump completed on 2025-04-14 11:20:58
