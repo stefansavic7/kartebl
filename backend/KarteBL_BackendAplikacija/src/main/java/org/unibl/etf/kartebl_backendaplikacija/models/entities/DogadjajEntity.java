@@ -44,7 +44,7 @@ public class DogadjajEntity implements BaseEntity<Integer>
     private String putanjaDoSlike;
 
     @Column(name = "odobren")
-    private boolean odobren;
+    private String odobren;
 
     @Column(name = "tip_slike")
     private String tipSlike;
