@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import AdminEventHandle from "../components/AdminEventHandle";
 
+//ovoj komponenti pristupa administrator.
 export const EventList = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);

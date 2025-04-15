@@ -1,22 +1,53 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { FaEye,FaEyeSlash } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 
 export const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [isVisible, setIsVisible] = useState(false);
   
   const openDiv = () => setIsVisible(true);
   const closeDiv = () => setIsVisible(false);
+
+  const [korisnik, setKorisnik] = useState(null);
+
+  useEffect(() => {
+    const fetchKorisnik = async() => {
+      try{
+         const tokenString = localStorage.getItem("token"); 
+         const token=JSON.parse(tokenString);
+         const decodeToken=jwtDecode(token);
+
+         const email=decodeToken.sub;
+
+         const response = await axios.get(`http://localhost:9000/korisnici/email/${email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        //ovde stao. treba mi endpoint koji vraca sifru korisnika. 
+        setKorisnik(response.data);
+       
+
+      }catch(error){
+        console.error("Greška pri dohvatanju korisnika:", error);
+      }
+
+    };
+
+    fetchKorisnik();
+  }, []);
 
   return (
     <div className="w-full h-full bg-gray-50 p-6">
       {/* Profile Info */}
       <div className="flex items-center bg-white p-4 rounded-lg shadow-md">
         <div className="ml-2">
-          <p className="text-xl font-semibold text-gray-800">Zdravko Colic</p>
-          <p className="text-gray-500">zdravko.colic@gmail.com</p>
+          <p className="text-xl font-semibold text-gray-800"> {korisnik ? `${korisnik.ime} ${korisnik.prezime}` : null}</p>
+          <p className="text-gray-500">{korisnik ? korisnik.email : null}</p>
         </div>
       </div>
 
@@ -27,7 +58,7 @@ export const MyProfile = () => {
           
           <input
           type="text"
-          value="Zdravko"
+          value={korisnik ? korisnik.ime : ""}
           readOnly
           className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"
     />
@@ -37,7 +68,7 @@ export const MyProfile = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">Prezime:</label>
           <input
             type="text"
-            value="Colic"
+            value={korisnik ? korisnik.prezime : ""}
             readOnly
             className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"
           />
@@ -47,12 +78,14 @@ export const MyProfile = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">E-mail:</label>
           <input
             type="text"
-            value="zdravko.colic@gmail.com"
+            value={korisnik ? korisnik.email : ""}
             readOnly
             className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-800 cursor-default focus:outline-none"          />
         </div>
 
-        <div className="relative">
+      
+      {/*
+    <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-2">Lozinka:</label>
           <input
             type={showPassword ? "text" : "password"}
@@ -71,7 +104,10 @@ export const MyProfile = () => {
             )}
           </button>
         </div>
-
+      
+      
+      */}
+      
         <button className="col-span-2 flex text-red-500 mt-40 justify-end " onClick={openDiv}>
           Obriši nalog
         </button>
