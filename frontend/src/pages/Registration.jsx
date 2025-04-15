@@ -1,19 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-  };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isFormValid =
+      email.trim() !== "" &&
+      password.trim() !== "" &&
+      passwordConfirm.trim() !== "" &&
+      password === passwordConfirm;
+  
+    setIsDisabled(!isFormValid);
+  }, [email, password, passwordConfirm]);
+  
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (password !== passwordConfirm) {
+    alert("Lozinke se ne poklapaju.");
+    return;
+  }
+
+  try {
+    const response = await axios.post("http://localhost:9000/register", {
+      email: email,
+      password: password,
+      korisnickoIme: email.split("@")[0],
+      tip: "korisnik"
+    });
+
+    console.log("Registracija uspješna:", response.data);
+    alert("Registracija uspješna!");
+    navigate("/prijava");
+  } catch (error) {
+    console.error("Greška pri registraciji:", error.response?.data || error.message);
+    alert("Došlo je do greške pri registraciji.");
+  }
+};
 
   return (
     <div
@@ -37,7 +72,6 @@ const Registration = () => {
             Registracija
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Email polje */}
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email adresa
@@ -52,7 +86,7 @@ const Registration = () => {
                   />
                 </div>
 
-                {/* Password polje */}
+              
                 <div className="space-y-2">
                   <label
                     htmlFor="password"
@@ -78,15 +112,19 @@ const Registration = () => {
                   />
                 </div>
 
-                {/* Submit dugme */}
                 <Button
-                  type="submit"
-                  className="w-full bg-gray-300 text-gray-700 py-2 px-4 rounded cursor-not-allowed"
-                  disabled
+                    type="submit"
+                    className={`w-full py-2 px-4 rounded ${
+                    isDisabled
+                    ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                    : "bg-pink-500 text-white hover:bg-pink-600"
+                  }`}
+                 disabled={isDisabled}
                 >
-                  Registruj se
+                Registruj se
                 </Button>
-             
+
+
                 {/* Google dugme */}
                 <Button
                   type="button"
