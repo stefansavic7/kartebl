@@ -1,8 +1,30 @@
-import ChooseTickets from "../components/ChooseTickets";
-import Footer from "../components/Footer";
 
-const EventPreview = ({ isVisible,closeDiv,naslov,showIMG,lokacija,datum,vrijeme,opis,numberOfTickets,marginTopValue=0}) =>{
-    return(
+import Footer from "../components/Footer";
+import { useState,useEffect } from "react";
+import axios from "axios";
+
+const EventPreview = ({ isVisible,closeDiv,naslov,showIMG,lokacija,datum,vrijeme,opis,tickets,marginTopValue=0, admin=false, id=null}) =>{
+  const [event, setEvent] = useState(null);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        if(admin){
+          const response = await axios.get(`http://localhost:9000/dogadjaji/${id}`);
+          setEvent(response.data);
+        }
+      } catch (error) {
+          alert("An error occurred while fetching event: "+error);
+      }
+    };
+    fetchEvent();
+  }, [id]); 
+
+  if (!event && admin) {
+    return <div>Loading event...</div>;
+  }
+  
+  return(
         <div >
             {isVisible && (
               <div className={`fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 mt-${marginTopValue}`}>
@@ -30,23 +52,35 @@ const EventPreview = ({ isVisible,closeDiv,naslov,showIMG,lokacija,datum,vrijeme
                   
                   <div className="flex flex-col justify-center items-center bg-zinc-200 rounded-2xl px-10 my-5">
                     <span className="text-2xl font-bold mb-5">Karte</span>
-                    {Array.from({ length: numberOfTickets }).map((_, index) => {
+                    {!admin && Array.from({ length: tickets }).map((_, index) => {
                     const karta = document.getElementsByName("Karta"+index)[0];
                     const cijenaInput = document.getElementsByName("Cijena"+index)[0];
-                    const bonusInfoInput = document.getElementsByName("BonusInfo"+index)[0];
 
                     return (
                       <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
                         <span className="font-bold text-xl ">{karta?.value}</span>
                         <div className="bg-white rounded-xl text-black m-2 p-2">
                           <div><b>Cijena:</b> {cijenaInput?.value} KM</div>
-                          <div><b>{bonusInfoInput?.value&&"Dodatne Informacije:"}</b> {bonusInfoInput?.value}</div>
                         </div>
                       </div>
                     );
                   })}
+                  {
+                  admin&&(Array.from({ length: event.karte.length }).map((_, index) => {
+                    const karta = event.karte[index].vrstaKarte;
+                    const cijenaInput = event.karte[index].cijena;
+                    const numTickets = event.karte[index].maxBrojKarata;
+                    return (
+                        <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
+                        <span className="font-bold text-xl ">{karta}</span>
+                        <div className="bg-white rounded-xl text-black m-2 p-2">
+                            <div><b>Cijena:</b> {cijenaInput} KM</div>
+                            <div><b>Broj karata:</b> {numTickets}</div>
+                        </div>
+                        </div>
+                    );
+                    }))}
                   </div>
-                  <ChooseTickets numberOfTickets={numberOfTickets}></ChooseTickets>
                   <Footer></Footer>
                 </div>
               </div>

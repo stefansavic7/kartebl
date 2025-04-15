@@ -24,7 +24,7 @@ const Home = ({ updateRoutes }) => {
 
   useEffect(() => {
     events.forEach((event) => {
-      if(event.odobren === true)
+      if(event.odobren === "aktivan")
         updateRoutes(event.id);
     });
   }, [events, updateRoutes]);
@@ -33,11 +33,10 @@ const Home = ({ updateRoutes }) => {
     <div className="flex flex-wrap justify-center items-center">
       {events.length > 0 ? (
         events.map((event, index) => (
-          (event.odobren === true) && (
+          (event.odobren === "aktivan") && (
             <Event
               id={event.id}
               key={index}
-              Picture={`data:image/jpeg;base64,${event.slika}`}
               Title={event.naziv}
               Location={event.lokacija}
               Date={`${event.datum.split('-').reverse().join('.')} u ${event.vrijeme.slice(0, 5)}h`}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Input from "./Input";
 
-const ChooseTickets = ({numberOfTickets}) => {
+const ChooseTickets = ({tickets}) => {
 
 
 const [isVisible, setIsVisible] = useState(false);
@@ -50,15 +50,15 @@ const [isVisible, setIsVisible] = useState(false);
                   &times;
                 </button>
               </div>
-              {Array.from({ length: numberOfTickets }).map((_, index) => {
-                    const karta = document.getElementsByName("Karta"+index)[0];
-                    const cijenaInput = Number(document.getElementsByName("Cijena"+index)[0]?.value);
-                    const numTicketInput = document.getElementsByName("NumTickets"+index)[0]?.value;
+              {Array.from({ length: tickets.length }).map((_, index) => {
+                    const karta = tickets[index].vrstaKarte;
+                    const cijenaInput = tickets[index].cijena;
+                    const numTicketInput = Number(tickets[index].maxBrojKarata)-Number(tickets[index].brojProdatihKarata);
 
                     return (
                       <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 bg-white justify-center items-center w-[100%]">
                         <div className='flex flex-row justify-between items-center w-full'>
-                          <span className="font-bold text-xl text-black ml-3 mb-2">{karta?.value}</span>
+                          <span className="font-bold text-xl text-black ml-3 mb-2">{karta}</span>
                           <Input name="NumBoughtTickets" fieldType="number" labelText="Količina" defaultValue={0} minValue={0} maxValue={numTicketInput} size="8rem" 
                             onChange={(e) =>
                               handleNumBoughtTicketsChange(index, cijenaInput, e, numTicketInput)

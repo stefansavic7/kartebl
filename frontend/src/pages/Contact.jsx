@@ -8,9 +8,8 @@ const Contact = () => {
     <div className="bg-zinc-200">
       <div className="flex flex-col p-10 space-y-10 justify-center items-center">
         <b className="text-2xl">Često postavljena pitanja</b>
-        <FAQ question="Pitanje" answer = "Odgovor nainivfnaisn aisndiasnidn asfjiasndoiasd jasfnoasjdonasd"></FAQ>
-        <FAQ question="Pitanjeeeeee eeeeee" answer = "Odgovor"></FAQ>
-        <FAQ question="Pitanje opettttttttttttttttttttttttttt" answer = "Odgovor nainivfnrergferfgerdfddddddddddddddddddddddddddddddddddddddddddferferaisn aisndiasnidn asfjiasndoiasdfffffffffffffffffffffffffffffffffffffffffffffffffffff jasfnoasjdonasd"></FAQ>
+        <FAQ question="Kako dobijam kartu?" answer = "Karta će nakon kupovine biti poslata na vaš email. Pri ulasku na događaj dužni ste kartu prikazati na ulazu."></FAQ>
+        <FAQ question="Da li se sa jednom kartom može više puta ući na događaj?" answer = "Ne, nakon skeniranja karta postaje nevalidna."></FAQ>
       </div>
       <div className="flex justify-center p-10 gap-60 pb-20 ">
         <SendEmail></SendEmail>

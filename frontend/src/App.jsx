@@ -11,6 +11,7 @@ import CreateEvent from "./pages/CreateEvent";
 import { EventList } from "./pages/EventList";
 import ShowEvent from "./components/ShowEvent";
 import { useCallback, useEffect, useState } from "react";
+import UpdateEvent from "./pages/UpdateEvent";
 
 const AppContent = () => {
   const location = useLocation();
@@ -58,13 +59,14 @@ const AppContent = () => {
         <Route path="eventList" element={<EventList />} />
         <Route path="prijava" element={<Login />} />
         <Route path="registracija" element={<Registration />} />
+        <Route path="updateEvent" element={<UpdateEvent />} />
 
         {/* Dynamically Add Routes for Approved Events */}
         {approvedEvents.map((eventId) => (
           <Route
             key={eventId}
             path={`${eventId}`}
-            element={<ShowEvent id={eventId} numberOfTickets={0}/>}
+            element={<ShowEvent id={eventId}/>}
           />
         ))}
 
