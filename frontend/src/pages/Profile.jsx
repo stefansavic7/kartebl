@@ -1,17 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MyProfile } from "../components/MyProfile.jsx";
 import { Orders } from "../components/Orders.jsx";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const Profile = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [korisnik, setKorisnik] = useState(null);
+
+  useEffect(() => {
+    const fetchKorisnik = async() => {
+      try{
+        const tokenString = localStorage.getItem("token"); 
+        const token=JSON.parse(tokenString);
+        const decodeToken=jwtDecode(token);
+        
+        const email=decodeToken.sub;
+        
+        const response = await axios.get(`http://localhost:9000/korisnici/email/${email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setKorisnik(response.data);
+
+
+      }catch(error){
+        console.error("Greška pri dohvatanju korisnika:", error);
+      }
+
+    };
+
+    fetchKorisnik();
+  }, []);
+
+
 
   const divContents = [
     <div className="p-5 w-full h-full">
       <MyProfile></MyProfile>
     </div>,
-    <div className="p-5">
-      <Orders></Orders>
-    </div>,
+    <div className="bg-zinc-100 w-[68rem] h-[37rem] rounded-2xl ml-5 mt-5 mb-5 overflow-y-auto">
+    <Orders></Orders>
+  </div>,
     <div className="p-5">
       <h2 className="text-2xl font-bold mb-4">Podešavanja</h2>
       <p className="text-gray-600">Promijenite svoje postavke ovdje.</p>
@@ -30,7 +62,7 @@ const Profile = () => {
       <div className="mt-5 ml-5 mb-5">
         <div className="p-10 bg-zinc-100 w-96 rounded-tl-2xl rounded-tr-2xl">
           <div className="text-2xl pt-8 pb-8">
-            <b>Marko Markovic</b>
+          <b>{korisnik ? `${korisnik.ime} ${korisnik.prezime}` : "Učitavanje..."}</b>
           </div>
         </div>
         <div className="mt-0.5 p-9 bg-zinc-100 w-96 rounded-bl-2xl rounded-br-2xl">
@@ -55,7 +87,7 @@ const Profile = () => {
           ))}
           <div>
               <button className="text-xl hover:opacity-40 transition flex items-center gap-1 pt-[5.05rem] mt-24">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" /></svg>
                   Odjava
               </button>
           </div>
