@@ -12,11 +12,13 @@ import { EventList } from "./pages/EventList";
 import ShowEvent from "./components/ShowEvent";
 import { useCallback, useEffect, useState } from "react";
 import { OrganizatorEvents } from "./pages/OrganizatorEvents";
+import { UserProvider } from "./utils/UserContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 const AppContent = () => {
   const location = useLocation();
-
-  // Initialize approvedEvents from localStorage unless on Home ("/")
+  
   const initialApprovedEvents =
     location.pathname === "/"
       ? []
@@ -26,7 +28,6 @@ const AppContent = () => {
 
   const [approvedEvents, setApprovedEvents] = useState(initialApprovedEvents);
 
-  // Clear approvedEvents when navigating to Home
   useEffect(() => {
     if (location.pathname === "/") {
       setApprovedEvents([]);
@@ -42,7 +43,6 @@ const AppContent = () => {
     });
   }, []);
 
-  // Always update localStorage to reflect the current approvedEvents state.
   useEffect(() => {
     localStorage.setItem("approvedEvents", JSON.stringify(approvedEvents));
   }, [approvedEvents]);
@@ -55,13 +55,29 @@ const AppContent = () => {
         <Route path="karte" element={<Tickets />} />
         <Route path="info" element={<About />} />
         <Route path="profil" element={<Profile />} />
-        <Route path="createEvent" element={<CreateEvent />} />
-        <Route path="eventList" element={<EventList />} />
         <Route path="prijava" element={<Login />} />
         <Route path="registracija" element={<Registration />} />
-        <Route path="organizatorEvents" element={<OrganizatorEvents />} />
+        
+        {/* Protected routes for Organizator */}
+        <Route 
+          path="createEvent" 
+          element={
+            <ProtectedRoute requiredRole="organizator">
+              <CreateEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="organizatorEvents" 
+          element={
+            <ProtectedRoute requiredRole="organizator">
+              <OrganizatorEvents />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route path="eventList" element={<EventList />} />
 
-        {/* Dynamically Add Routes for Approved Events */}
         {approvedEvents.map((eventId) => (
           <Route
             key={eventId}
@@ -78,9 +94,13 @@ const AppContent = () => {
 
 const App = () => {
   return (
+    
+  <UserProvider>
     <BrowserRouter>
-      <AppContent />
+            <AppContent />
     </BrowserRouter>
+  </UserProvider>
+    
   );
 };
 
