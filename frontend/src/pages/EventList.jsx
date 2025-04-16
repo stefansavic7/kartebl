@@ -18,24 +18,33 @@ export const EventList = () => {
           withCredentials: true,
         });
 
-        const mappedEvents = response.data.map(event => ({
+        const statusOrder = {
+          "azuriran": 1,
+          "aktivan": 2,
+          "zahtjev": 3,
+          "sakriven": 4
+        };
+
+        const mappedEvents = response.data
+        .filter(event => event.odobren !== "odbijen")
+        .map(event => ({
           id: event.id,
           naziv: event.naziv,
           datum: event.datum,
           vrijeme: event.vrijeme,
           opis: event.opis,
           lokacija: event.lokacija,
-          slika: event.slika 
-            ? `data:${event.tipSlike};base64,${event.slika}` 
-            : "default-image.jpg",
-          databasePicture: event.slika,
-          type: event.tipSlike,
+          karte: event.karte,
           odobren: event.odobren,
           organizatorId: event.organizatorId,
           administratorId: event.administratorId,
         }));
 
-        setEvents(mappedEvents);
+        const sortedEvents = mappedEvents.sort((a, b) => {
+          return statusOrder[a.odobren] - statusOrder[b.odobren];
+        });
+
+        setEvents(sortedEvents);
       } catch (error) {
         console.error("Greška pri učitavanju događaja:", error);
       }
@@ -43,20 +52,6 @@ export const EventList = () => {
 
     fetchEvents();
   }, []);
-
-  const updateEvent = (updatedEvent) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      )
-    );
-  };
-
-  const removeEvent = (deletedEvent)=> {
-    setEvents((prevEvents) =>
-      prevEvents.filter((event) => event.id !== deletedEvent.id)
-    );
-  }
 
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -66,20 +61,34 @@ export const EventList = () => {
           {events.map((event) => (
             <div
               key={event.id}
-              className={`bg-white shadow-lg rounded-2xl overflow-hidden ${event.odobren ? 'border border-green-500' : ''}`}
+              className={`bg-white shadow-lg rounded-2xl overflow-hidden ${event.odobren==="aktivan" ? 'border border-green-500' : ''}`}
             >
               <div className="flex flex-col sm:flex-row">
                 <img 
-                  src={event.slika} 
+                  src={`http://localhost:9000/dogadjaji/dogadjaj/${event.id}/slika`} 
                   alt={`Slika ${event.naziv}`} 
                   className="w-full sm:w-32 h-32 object-cover">
                 </img>
-                <div className={`p-4 flex-1 relative ${event.odobren ? 'bg-green-100' : ''}`}>
-                  {event.odobren===1 && (
+                <div className={`p-4 flex-1 relative ${event.odobren==="aktivan" ? 'bg-green-100' : ''}`}>
+                  {(event.odobren==="aktivan") && (
                     <div className="absolute top-1 right-1 text-green-500 font-bold text-sm opacity-80">
                     Odobren
                   </div>
-                  
+                  )}
+                  {(event.odobren==="sakriven") && (
+                    <div className="absolute top-1 right-1 text-blue-500 font-bold text-sm opacity-80">
+                    Sakriven
+                  </div>
+                  )}
+                  {(event.odobren==="azuriran") && (
+                    <div className="absolute top-1 right-1 text-red-500 font-bold text-sm opacity-80">
+                    Azuriran
+                  </div>
+                  )}
+                  {(event.odobren==="zahtjev") && (
+                    <div className="absolute top-1 right-1 text-yellow-500 font-bold text-sm opacity-80">
+                    Zahtjev
+                  </div>
                   )}
                   <h2 className="text-xl font-semibold">{event.naziv}</h2>
                   <p className="text-gray-600">Datum: {event.datum}</p>
@@ -95,8 +104,10 @@ export const EventList = () => {
         </div>
       </div>
 
-      {selectedEvent && (
-        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent} updateEvent={updateEvent} removeEvent={removeEvent}/>
+      {selectedEvent &&(
+        
+        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent}/>
+        
       )}
     </div>
   );

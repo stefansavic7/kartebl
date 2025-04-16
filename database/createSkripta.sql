@@ -104,7 +104,7 @@ CREATE TABLE `karta` (
   PRIMARY KEY (`id`),
   KEY `fk_karta_dogadjaj1_idx` (`dogadjaj_id`),
   KEY `fk_karta_organizator1_idx` (`organizator_id`),
-  CONSTRAINT `fk_karta_dogadjaj1` FOREIGN KEY (`dogadjaj_id`) REFERENCES `dogadjaj` (`id`),
+  CONSTRAINT `fk_karta_dogadjaj1` FOREIGN KEY (`dogadjaj_id`) REFERENCES `dogadjaj` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_karta_organizator1` FOREIGN KEY (`organizator_id`) REFERENCES `organizator` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;

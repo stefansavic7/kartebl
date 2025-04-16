@@ -2,10 +2,11 @@ import Input from "../components/Input";
 import Event from "../components/Event";
 import EventPreview from "../components/EventPreview";
 import React, { useState} from "react";
+import { jwtDecode } from "jwt-decode";
 
 
 
-function TicketForm({ numberOfTickets, setNumberOfTickets }) {
+export function TicketForm({ numberOfTickets, setNumberOfTickets, add="" }) {
 
   const handleNumberOfTicketsChange = (e) => {
     const value =Math.max(1,Number(e.target.value)) ;
@@ -15,17 +16,17 @@ function TicketForm({ numberOfTickets, setNumberOfTickets }) {
   return (
        
     <div className="flex flex-col items-center justify-center m-5">
-      <Input name="Num" id= "numTickets"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={numberOfTickets} minValue={1}
+      <Input name={"Num"+add} id= "numTickets"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={numberOfTickets} minValue={1}
         onChange={(e) => {
           handleNumberOfTicketsChange(e);
         }}/>
       <div className="bg-zinc-200 space-y-4 rounded-2xl p-10 mt-5">
         {Array.from({ length: numberOfTickets }).map((_, index) => (
           <div key={index} className="flex bg-white rounded-2xl p-5">
-            <Input name={"Karta"+index}fieldType="outlined-required" labelText="Naziv karte" />
-            <Input name={"Cijena"+index}fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
-            <Input name={"BonusInfo"+index}fieldType="outlined-required" labelText="Dodatne informacije" />
-            <Input name={"NumTickets"+index}fieldType="number" labelText="Broj karata*" minValue={1} maxValue={100000}/>
+            <Input name={"Karta"+add+index}fieldType="outlined-required" labelText="Naziv karte" />
+            <Input name={"Cijena"+add+index}fieldType="number" labelText="Cijena karte u KM*" minValue={0} maxValue={1000} />
+            {/*<Input name={"BonusInfo"+add+index}fieldType="outlined-required" labelText="Dodatne informacije" />*/}
+            <Input name={"NumTickets"+add+index}fieldType="number" labelText="Broj karata*" minValue={1} maxValue={100000}/>
           </div>
         ))}
       </div>
@@ -38,21 +39,12 @@ const CreateEvent = ()=>{
   
     
     const [file, setFile] = useState(null);
-    const [slika, setSlika] = useState("");
-    const [showIMG, setShowIMG] = useState(null)
-    const [tipSlike, setTipSlike] = useState("");
+    const [showIMG, setShowIMG] = useState("");
 
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
           setFile(selectedFile);
-          setTipSlike(selectedFile.type);
-          const reader = new FileReader();
-          reader.readAsDataURL(selectedFile);
-          reader.onloadend = () => {
-              const base64String = reader.result.split(",")[1];
-              setSlika(base64String);
-          };
           const imageUrl = URL.createObjectURL(selectedFile);
           setShowIMG(imageUrl);
       }
@@ -115,77 +107,109 @@ const CreateEvent = ()=>{
     }
 
     const handleSubmit = async () => {
-
       const naziv = document.getElementsByName("Naslov")[0]?.value || "";
       const datum = document.getElementsByName("Datum")[0]?.value || "";
-      const vrijeme = (document.getElementsByName("Vrijeme")[0]?.value + ":00") || ""; 
+      const vrijeme = (document.getElementsByName("Vrijeme")[0]?.value + ":00") || "";
       const lokacija = document.getElementsByName("Lokacija")[0]?.value || "";
       const opis = document.getElementsByName("Opis")[0]?.value || "";
       
       const formattedDatum = datum.replace(/\.$/, "").split(".").reverse().join("-");
-      // Convert to YYYY-MM-DD
-  
+    
       const token = JSON.parse(localStorage.getItem("token"));
       if (!token) {
-          alert("No token found. Please log in.");
+        alert("No token found. Please log in.");
+        return;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const email=decodedToken.sub;
+      console.log(decodedToken);
+      const response1 = await fetch('http://localhost:9000/organizatori/email/'+`${email}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+          }
+      });
+
+      if (!response1.ok) {
+          alert("Failed getting ID");
           return;
       }
-  
+      const data = await response1.json();
+      const organizatorId =data.id;
+      console.log("ORGANIZATOR ID: "+organizatorId);
+    
       const administratorId = "2";
-      const organizatorId = "6"; // Temporary hardcoded value
-      const odobren = false;
-  
-      const event = { naziv, datum: formattedDatum, vrijeme, lokacija, opis, slika, administratorId, organizatorId, odobren, tipSlike };
-  
+      const odobren = "zahtjev";
+    
+      const event = {
+        naziv,
+        datum: formattedDatum,
+        vrijeme,
+        lokacija,
+        opis,
+        administratorId,
+        organizatorId,
+        odobren,
+      };
+    
+      const formData = new FormData();
+      const jsonBlob = new Blob([JSON.stringify(event)], { type: "application/json" });
+      formData.append("podaci", jsonBlob);
+      formData.append("slika", file);
+    
       try {
-        const response = await fetch("http://localhost:9000/dogadjaji", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(event),
+        const response = await fetch("http://localhost:9000/dogadjaji/insertDogadjaj", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`, 
+          },
+          body: formData,
         });
     
-        const responseText = await response.text();
-    
-        if (response.ok) {
-            const result = JSON.parse(responseText);
-            alert("Event Created Successfully");
-            for(var i=0; i<numberOfTickets; i++)
-              for(var j=0; j<document.getElementsByName("NumTickets"+i)[0]?.value || 0;j++){
-                const cijena = document.getElementsByName("Cijena"+i)[0]?.value;
-                const qr = null;
-                const vrstaKarte = document.getElementsByName("Karta"+i)[0]?.value;
-                const karta = { cijena, qr, vrstaKarte, dogadjajId: result.id, organizatorId};
-            
-                try {
-                  const response1 = await fetch("http://localhost:9000/karte", {
-                      method: "POST",
-                      headers: {
-                          "Content-Type": "application/json",
-                          "Authorization": `Bearer ${token}`
-                      },
-                      body: JSON.stringify(karta),
-                  });
-        
-                  if (!response1.ok) {
-                      alert("Failed to create ticket");
-                  }
-                } catch (error1) {
-                    alert("An error occurred while creating the ticket: "+error1);
-                }
-            }
-        } else {
-            alert("Failed to create event");
+        if (!response.ok) {
+          const errorText = await response.text();
+          alert("Failed to create event: " + errorText);
+          return;
         }
-    } catch (error) {
-        alert("An error occurred while creating the event: "+error);
-    }
-
     
-  };
+        const result = await response.json();
+        alert("Event Created Successfully");
     
+        for (let i = 0; i < numberOfTickets; i++) {
+          const maxBrojKarata = document.getElementsByName("NumTickets" + i)[0]?.value;
+          const cijena = document.getElementsByName("Cijena" + i)[0]?.value;
+          const vrstaKarte = document.getElementsByName("Karta" + i)[0]?.value;
+          const karta = {
+            cijena,
+            vrstaKarte,
+            dogadjajId: result.id,
+            organizatorId,
+            maxBrojKarata
+          };
+    
+          try {
+            const response1 = await fetch("http://localhost:9000/karte", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+              body: JSON.stringify(karta),
+            });
+    
+            if (!response1.ok) {
+              alert("Failed to create ticket");
+            }
+          } catch (error1) {
+            alert("An error occurred while creating the ticket: " + error1);
+          }
+        }
+      } catch (error) {
+        alert("An error occurred while creating the event: " + error);
+      }
+    };
       
     return(
         <div className="flex flex-col items-center justify-center m-10">
@@ -208,7 +232,7 @@ const CreateEvent = ()=>{
             {errors.time && <p className="text-red-600">{errors.time}</p>}
             <Input name="Opis"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ="" helperText='' maxHh='100rem'></Input>
             <TicketForm numberOfTickets={numberOfTickets} setNumberOfTickets={setNumberOfTickets}></TicketForm>
-            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslov")[0]?.value} Date={(document.getElementsByName("Datum")[0]?.value||"") +" u "+ (document.getElementsByName("Vrijeme")[0]?.value||"")+"h"} Location={document.getElementsByName("Lokacija")[0]?.value}></Event>
+            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslov")[0]?.value} Date={(document.getElementsByName("Datum")[0]?.value||"") +" u "+ (document.getElementsByName("Vrijeme")[0]?.value||"")+"h"} Location={document.getElementsByName("Lokacija")[0]?.value} Lnk={false}></Event>
             <div className="flex gap-10">
                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]"onClick={refreshEvent}>
                   Osvježi
@@ -248,7 +272,7 @@ const CreateEvent = ()=>{
                 datum={document.getElementsByName("Datum")[0]?.value}
                 vrijeme={document.getElementsByName("Vrijeme")[0]?.value}
                 opis={document.getElementsByName("Opis")[0]?.value}
-                numberOfTickets={numberOfTickets}
+                tickets={numberOfTickets}
               />
             )}
         </div>

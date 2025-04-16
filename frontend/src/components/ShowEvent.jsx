@@ -2,7 +2,7 @@ import ChooseTickets from "../components/ChooseTickets";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const ShowEvent = ({id,numberOfTickets}) =>{
+const ShowEvent = ({id}) =>{
   const [event, setEvent] = useState(null);
 
   useEffect(() => {
@@ -26,10 +26,10 @@ const ShowEvent = ({id,numberOfTickets}) =>{
             <div className="relative bg-gray-800 bg-opacity-75 flex items-center justify-center z-40">
                 <div className="w-full bg-white shadow-lg overflow-y-auto z-30 flex flex-col items-center justify-start">
                     <span  className="z-50 text-3xl pt-10"><b>{event.naziv}</b></span>  
-                    <img src={`data:image/jpeg;base64,${event.slika}`} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>
+                    <img src={`http://localhost:9000/dogadjaji/dogadjaj/`+`${id}`+`/slika`} alt="Slika" className="rounded shadow-lg w-[70%] h-auto my-10"/>
                     <div className="flex flex-row text-2xl justify-between space-x-[38rem] font-bold">
                     <div className="flex pl-3 gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" className="size-6"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282a1.144 0.742Z" clip-rule="evenodd"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" className="size-6"><path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282a1.144 0.742Z" clipRule="evenodd"/></svg>
                         <div>{event.lokacija}</div>
                     </div>
                     <div className="flex pr-3 pb-10 gap-1.5">
@@ -44,23 +44,20 @@ const ShowEvent = ({id,numberOfTickets}) =>{
                     
                     <div className="flex flex-col justify-center items-center bg-zinc-200 rounded-2xl px-10 my-5">
                     <span className="text-2xl font-bold mb-5">Karte</span>
-                    {Array.from({ length: numberOfTickets }).map((_, index) => {
-                    const karta = document.getElementsByName("Karta"+index)[0];
-                    const cijenaInput = document.getElementsByName("Cijena"+index)[0];
-                    const bonusInfoInput = document.getElementsByName("BonusInfo"+index)[0];
-
+                    {Array.from({ length: event.karte.length }).map((_, index) => {
+                    const karta = event.karte[index].vrstaKarte;
+                    const cijenaInput = event.karte[index].cijena;
                     return (
                         <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
-                        <span className="font-bold text-xl ">{karta?.value}</span>
+                        <span className="font-bold text-xl ">{karta}</span>
                         <div className="bg-white rounded-xl text-black m-2 p-2">
-                            <div><b>Cijena:</b> {cijenaInput?.value} KM</div>
-                            <div><b>{bonusInfoInput?.value&&"Dodatne Informacije:"}</b> {bonusInfoInput?.value}</div>
+                            <div><b>Cijena:</b> {cijenaInput} KM</div>
                         </div>
                         </div>
                     );
                     })}
                     </div>
-                    <ChooseTickets numberOfTickets={numberOfTickets}></ChooseTickets>
+                    <ChooseTickets tickets={event.karte}></ChooseTickets>
                 </div>
             </div>
     );

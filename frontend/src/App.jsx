@@ -11,6 +11,7 @@ import CreateEvent from "./pages/CreateEvent";
 import { EventList } from "./pages/EventList";
 import ShowEvent from "./components/ShowEvent";
 import { useCallback, useEffect, useState } from "react";
+import UpdateEvent from "./pages/UpdateEvent";
 import { OrganizatorEvents } from "./pages/OrganizatorEvents";
 import { UserProvider } from "./utils/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -57,6 +58,7 @@ const AppContent = () => {
         <Route path="profil" element={<Profile />} />
         <Route path="prijava" element={<Login />} />
         <Route path="registracija" element={<Registration />} />
+        <Route path="updateEvent" element={<UpdateEvent/>} />
         
         {/* Protected routes for Organizator */}
         <Route 
@@ -71,7 +73,7 @@ const AppContent = () => {
           path="organizatorEvents" 
           element={
             <ProtectedRoute requiredRole="organizator">
-              <OrganizatorEvents />
+              <OrganizatorEvents/>
             </ProtectedRoute>
           }
         />
@@ -82,7 +84,7 @@ const AppContent = () => {
           <Route
             key={eventId}
             path={`${eventId}`}
-            element={<ShowEvent id={eventId} numberOfTickets={0}/>}
+            element={<ShowEvent id={eventId}/>}
           />
         ))}
 

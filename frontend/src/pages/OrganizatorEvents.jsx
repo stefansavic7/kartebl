@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import OrganizatorEventHandle from "../components/OrganizatorEventHandle.jsx";
 
 export const OrganizatorEvents = () => {
     const [organizatorMail, setOrganizatorMail] = useState(null);
@@ -8,6 +9,7 @@ export const OrganizatorEvents = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [token, setToken] = useState(null);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         const tokenString = localStorage.getItem("token");
@@ -142,7 +144,7 @@ export const OrganizatorEvents = () => {
                             </div>
                             <button 
                                 style={styles.button}
-                                onClick={() => {/* Dodaj funkcionalnost klikom */}}
+                                onClick={() => setSelectedEvent(dogadjaj)}
                             >
                                 Pregledaj
                             </button>
@@ -150,6 +152,9 @@ export const OrganizatorEvents = () => {
                     </div>
                 ))}
             </div>
+            {selectedEvent &&(    
+                <OrganizatorEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent}/>  
+            )}
         </div>
     );
 };

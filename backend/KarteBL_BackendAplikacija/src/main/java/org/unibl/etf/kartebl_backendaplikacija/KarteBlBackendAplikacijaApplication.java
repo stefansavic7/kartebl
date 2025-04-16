@@ -10,6 +10,7 @@ public class KarteBlBackendAplikacijaApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(KarteBlBackendAplikacijaApplication.class, args);
+        
     }
 
     @Bean
