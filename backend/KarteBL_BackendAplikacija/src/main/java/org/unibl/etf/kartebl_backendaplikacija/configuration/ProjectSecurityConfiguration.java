@@ -84,7 +84,7 @@ public class ProjectSecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT,"dogadjaji/**")
                         .hasAnyRole("administrator", "organizator")
                         .requestMatchers(HttpMethod.DELETE,"dogadjaji/**")
-                        .hasRole("administrator")
+                        .hasAnyRole("administrator", "organizator")
                         
                         .requestMatchers(HttpMethod.POST,"karte/**")
                         .hasAnyRole("administrator", "organizator")

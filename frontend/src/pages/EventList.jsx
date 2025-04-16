@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import AdminEventHandle from "../components/AdminEventHandle";
 
+//ovoj komponenti pristupa administrator.
 export const EventList = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -21,7 +22,7 @@ export const EventList = () => {
           "azuriran": 1,
           "aktivan": 2,
           "zahtjev": 3,
-          "uklonjen": 4
+          "sakriven": 4
         };
 
         const mappedEvents = response.data
@@ -52,20 +53,6 @@ export const EventList = () => {
     fetchEvents();
   }, []);
 
-  const updateEvent = (updatedEvent) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
-      )
-    );
-  };
-
-  const removeEvent = (deletedEvent)=> {
-    setEvents((prevEvents) =>
-      prevEvents.filter((event) => event.id !== deletedEvent.id)
-    );
-  }
-
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="container mx-auto p-4">
@@ -88,7 +75,7 @@ export const EventList = () => {
                     Odobren
                   </div>
                   )}
-                  {(event.odobren==="uklonjen") && (
+                  {(event.odobren==="sakriven") && (
                     <div className="absolute top-1 right-1 text-blue-500 font-bold text-sm opacity-80">
                     Sakriven
                   </div>
@@ -119,7 +106,7 @@ export const EventList = () => {
 
       {selectedEvent &&(
         
-        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent} updateEvent={updateEvent} removeEvent={removeEvent}/>
+        <AdminEventHandle isVisible={!!selectedEvent} setIsVisible={() => setSelectedEvent(null)} event={selectedEvent}/>
         
       )}
     </div>

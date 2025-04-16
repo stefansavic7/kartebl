@@ -5,12 +5,15 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode'
+import { useUser } from "../utils/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const navigate = useNavigate();
+  const { setUser } = useUser();
+
 
   useEffect(() => {
     setIsDisabled(!(email && password));
@@ -18,24 +21,36 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.removeItem("token")
+    localStorage.removeItem("token");
     try {
       const response = await axios.post("http://localhost:9000/login", {
         email,
         password,
       });
-
-      const token = response.data
+  
+      const token = response.data;
       if (token) {
-        localStorage.setItem("token", JSON.stringify(token))
+        localStorage.setItem("token", JSON.stringify(token));
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
+  
+       
         const userRole = decodedToken.role;
+        const userEmail = decodedToken.sub;
+  
         console.log("User Role:", userRole);
-        navigate("/")
-      }
-      else{
-        localStorage.removeItem("token")
+        console.log("User Email:", userEmail);
+  
+      
+        setUser({
+          email: userEmail,
+          role: userRole,
+          token: token,
+        });
+  
+        
+        navigate("/");
+      } else {
+        localStorage.removeItem("token");
       }
     } catch (error) {
       console.error(
@@ -44,6 +59,8 @@ const Login = () => {
       );
     }
   };
+  
+  
 
   return (
     <div

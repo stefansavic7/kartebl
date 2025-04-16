@@ -7,21 +7,25 @@ import axios from "axios";
 import { TicketForm } from "./CreateEvent";
 import { useEffect } from "react";
 
-const UpdateEvent = ()=>{ //id
+const UpdateEvent = ()=>{
 
     const [event, setEvent] = useState(null);
+    const [id,setID]= useState(null);
 
     useEffect(() => {
         const fetchEvent = async () => {
         try {
-            const response = await axios.get(`http://localhost:9000/dogadjaji/8`); //${id}
-            setEvent(response.data);
+            setID(JSON.parse(localStorage.getItem("updateEvent")));
+            if(id){
+            const response = await axios.get(`http://localhost:9000/dogadjaji/${id}`); 
+            setEvent(response.data);}
+            
         } catch (error) {
             alert("An error occurred while fetching event.");
         }
         };
         fetchEvent();
-    });  //, [id] dodaj izmedju zadnje 2 zagrade
+    }, [id]); 
 
     const [numberOfTickets, setNumberOfTickets] = useState(1);
       
@@ -46,8 +50,8 @@ const UpdateEvent = ()=>{ //id
 
     useEffect(() => {
         if (event) {
-          setDate(event.datum.split('-').reverse().join('.'));
-          setTime(event.vrijeme.slice(0, 5));
+          setDate(event.datum);
+          setTime(event.vrijeme);
           setNaziv(event.naziv);
           setLokacija(event.lokacija);
           setOpis(event.opis);
@@ -105,14 +109,19 @@ const UpdateEvent = ()=>{ //id
     }
 
     const handleSubmit = async () => {
-          const naziv = document.getElementsByName("Naslova")[0]?.value || "";
+          let naziv = document.getElementsByName("Naslova")[0]?.value || "";
           const datum = document.getElementsByName("Datuma")[0]?.value || "";
-          const vrijeme = (document.getElementsByName("Vrijemea")[0]?.value + ":00") || "";
-          const lokacija = document.getElementsByName("Lokacijaa")[0]?.value || "";
+          let vrijeme = (document.getElementsByName("Vrijemea")[0]?.value + ":00") || "";
+          let lokacija = document.getElementsByName("Lokacijaa")[0]?.value || "";
           const opis = document.getElementsByName("Opisa")[0]?.value || "";
           
-          const formattedDatum = datum.replace(/\.$/, "").split(".").reverse().join("-");
-        
+          let formattedDatum = datum.replace(/\.$/, "").split(".").reverse().join("-");
+          if(formattedDatum[4]!=='-')
+            formattedDatum=date;
+
+          if(vrijeme[3]!==':')
+            vrijeme=time;
+          
           const token = JSON.parse(localStorage.getItem("token"));
           if (!token) {
             alert("No token found. Please log in.");
@@ -136,27 +145,34 @@ const UpdateEvent = ()=>{ //id
           }
           const data = await response1.json();
           const organizatorId =data.id;
-          console.log("ORGANIZATOR ID: "+organizatorId);
+          let odobren="";
+          if((event.odobren==="aktivan")||(event.odobren==="sakriven"))    //azuriranSakriven dodati
+            odobren = "azuriran";
+          else
+            odobren = "zahtjev";
+
+          if(naziv==="")
+            naziv=nazivv;
+          if(lokacija==="")
+            lokacija=lokacijaa;
         
-          const administratorId = "2";
-          const odobren = "zahtjev";
-        
-          const event = {
+          const event1 = {
             naziv,
             datum: formattedDatum,
             vrijeme,
             lokacija,
             opis,
-            administratorId,
+            administratorId: event.administratorId,
             organizatorId,
             odobren,
           };
+          console.log("EVENT: "+event1);
         
           const formData = new FormData();
-          const jsonBlob = new Blob([JSON.stringify(event)], { type: "application/json" });
+          const jsonBlob = new Blob([JSON.stringify(event1)], { type: "application/json" });
           formData.append("podaci", jsonBlob);
           if(showIMG===""){
-          const imageResponse = await fetch(`http://localhost:9000/dogadjaji/dogadjaj/${event.id}/slika`);
+          const imageResponse = await fetch(`http://localhost:9000/dogadjaji/dogadjaj/${id}/slika`);
              if (!imageResponse.ok) {
                alert("Failed to fetch image");
                return;
@@ -168,7 +184,7 @@ const UpdateEvent = ()=>{ //id
         }
           
           try {
-            const response = await fetch(`http://localhost:9000/dogadjaji/updateDogadjaj/${event.id}`, {
+            const response = await fetch(`http://localhost:9000/dogadjaji/updateDogadjaj/${id}`, {
                 method: "PUT",
                 headers: {
                 "Authorization": `Bearer ${token}`, 
@@ -191,7 +207,7 @@ const UpdateEvent = ()=>{ //id
 
     return(
         <div className="flex flex-col items-center justify-center m-10">
-            <Input name="Naslova" fieldType='outlined-required' labelText = 'Naslov dogadjaja' defaultValue={nazivv}></Input>
+            <Input name="Naslova" fieldType='outlined-required' labelText = 'Naslov dogadjaja'></Input>
             <div className="flex flex-col items-center justify-center bg-zinc-200 rounded-2xl p-10 w-[20rem] h-[14rem] my-5">
                 <input type="file" id="fileInput" onChange={handleFileChange} className="hidden"/>
                 <label htmlFor="fileInput" className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition cursor-pointer">
@@ -203,10 +219,10 @@ const UpdateEvent = ()=>{ //id
             </div>
 
 
-            <Input name="Lokacijaa"fieldType='outlined-required' labelText = 'Lokacija dogadjaja' defaultValue={lokacijaa}></Input>
-            <Input name="Datuma"fieldType='outlined-required' labelText = 'Datum dogadjaja (dd.mm.yyyy.)' defaultValue={date} onBlur={handleDateChange}></Input>
+            <Input name="Lokacijaa"fieldType='outlined-required' labelText = 'Lokacija dogadjaja'></Input>
+            <Input name="Datuma"fieldType='outlined-required' labelText = 'Datum dogadjaja (dd.mm.yyyy.)'  onBlur={handleDateChange}></Input>
             {errors.date && <p className="text-red-600">{errors.date}</p>}
-            <Input name="Vrijemea"fieldType='outlined-required' labelText = 'Vrijeme dogadjaja (hh:mm)' defaultValue={time} onBlur={handleTimeChange}></Input>
+            <Input name="Vrijemea"fieldType='outlined-required' labelText = 'Vrijeme dogadjaja (hh:mm)' onBlur={handleTimeChange}></Input>
             {errors.time && <p className="text-red-600">{errors.time}</p>}
             <Input name="Opisa"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ={opiss} helperText='' maxHh='100rem'></Input>
             <TicketForm numberOfTickets={numberOfTickets} setNumberOfTickets={setNumberOfTickets} add={"a"}></TicketForm>
