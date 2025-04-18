@@ -4,7 +4,6 @@ import EventPreview from "../components/EventPreview";
 import React, { useState} from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { TicketForm } from "./CreateEvent";
 import { useEffect } from "react";
 
 const UpdateEvent = ()=>{
@@ -27,7 +26,9 @@ const UpdateEvent = ()=>{
         fetchEvent();
     }, [id]); 
 
-    const [numberOfTickets, setNumberOfTickets] = useState(1);
+
+
+    const [numberOfTickets, setNumberOfTickets] = useState(null);
       
         
     const [file, setFile] = useState(null);
@@ -48,15 +49,48 @@ const UpdateEvent = ()=>{
     const [time, setTime] = useState("");
     const [errors, setErrors] = useState({ date: '', time: '' });
 
+    const [minTickets, setMinTickets] = useState(null);
+
     useEffect(() => {
+        let url;
         if (event) {
           setDate(event.datum);
           setTime(event.vrijeme);
           setNaziv(event.naziv);
           setLokacija(event.lokacija);
           setOpis(event.opis);
+          setNumberOfTickets(event.karte.length);
+          setMinTickets(event.karte.length);
+          async function getImage(){
+            const imageResponse = await fetch(`http://localhost:9000/dogadjaji/dogadjaj/${id}/slika`);
+             if (!imageResponse.ok) {
+               alert("Failed to fetch image");
+               return;
+             }
+            const imageBlob = await imageResponse.blob();
+            url=URL.createObjectURL(imageBlob)
+            setShowIMG(url);
+          }
+          getImage();
+          
+        }
+        return () => {                         
+          if (url) {
+            URL.revokeObjectURL(url);
+          }
         }
       }, [event]);
+
+    useEffect(() => {
+      if (time.length > 0 && time.length < 6) {
+        setTime(prev => prev + ':00');
+      }
+    }, [time]);
+
+    const handleNumberOfTicketsChange = (e) => {
+      const value =Math.max(minTickets,Number(e.target.value)) ;
+      setNumberOfTickets(value);
+    };
 
     const validateDate = (value) => {
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01]).(0[1-9]|1[0-2]).\d{4}.$/;
@@ -111,16 +145,13 @@ const UpdateEvent = ()=>{
     const handleSubmit = async () => {
           let naziv = document.getElementsByName("Naslova")[0]?.value || "";
           const datum = document.getElementsByName("Datuma")[0]?.value || "";
-          let vrijeme = (document.getElementsByName("Vrijemea")[0]?.value + ":00") || "";
           let lokacija = document.getElementsByName("Lokacijaa")[0]?.value || "";
           const opis = document.getElementsByName("Opisa")[0]?.value || "";
           
           let formattedDatum = datum.replace(/\.$/, "").split(".").reverse().join("-");
           if(formattedDatum[4]!=='-')
             formattedDatum=date;
-
-          if(vrijeme[3]!==':')
-            vrijeme=time;
+   
           
           const token = JSON.parse(localStorage.getItem("token"));
           if (!token) {
@@ -130,7 +161,6 @@ const UpdateEvent = ()=>{
     
           const decodedToken = jwtDecode(token);
           const email=decodedToken.sub;
-          console.log(decodedToken);
           const response1 = await fetch('http://localhost:9000/organizatori/email/'+`${email}`, {
               method: "GET",
               headers: {
@@ -146,7 +176,7 @@ const UpdateEvent = ()=>{
           const data = await response1.json();
           const organizatorId =data.id;
           let odobren="";
-          if((event.odobren==="aktivan")||(event.odobren==="sakriven"))    //azuriranSakriven dodati
+          if((event.odobren==="aktivan")||(event.odobren==="sakriven")) 
             odobren = "azuriran";
           else
             odobren = "zahtjev";
@@ -159,19 +189,18 @@ const UpdateEvent = ()=>{
           const event1 = {
             naziv,
             datum: formattedDatum,
-            vrijeme,
+            vrijeme:time,
             lokacija,
             opis,
             administratorId: event.administratorId,
             organizatorId,
             odobren,
           };
-          console.log("EVENT: "+event1);
         
           const formData = new FormData();
           const jsonBlob = new Blob([JSON.stringify(event1)], { type: "application/json" });
           formData.append("podaci", jsonBlob);
-          if(showIMG===""){
+          if(!file){
           const imageResponse = await fetch(`http://localhost:9000/dogadjaji/dogadjaj/${id}/slika`);
              if (!imageResponse.ok) {
                alert("Failed to fetch image");
@@ -203,6 +232,62 @@ const UpdateEvent = ()=>{
         } catch (error) {
             alert("An error occurred while updating the event: " + error);
         }
+        for (let i = 0; i < minTickets; i++) {
+          const maxBrojKarata = document.getElementsByName("NumTicketsa" + i)[0]?.value;
+          const karta = {
+            cijena:event.karte[i].cijena,
+            vrstaKarte:event.karte[i].vrstaKarte,
+            dogadjajId: event.id,
+            organizatorId: event.organizatorId,
+            maxBrojKarata
+          };
+    
+          try {
+            const response1 = await fetch(`http://localhost:9000/karte/update/${event.karte[i].id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+              body: JSON.stringify(karta),
+            });
+    
+            if (!response1.ok) {
+              alert("Failed to update ticket");
+            }
+          } catch (error1) {
+            alert("An error occurred while creating the ticket: " + error1);
+          }
+        }
+        for (let i = 0; i < numberOfTickets-minTickets; i++) {
+          const maxBrojKarata = document.getElementsByName("NumTicketsaa" + i)[0]?.value;
+          const cijena = document.getElementsByName("Cijenaaa" + i)[0]?.value;
+          const vrstaKarte = document.getElementsByName("Kartaaa" + i)[0]?.value;
+          const karta = {
+            cijena,
+            vrstaKarte,
+            dogadjajId: event.id,
+            organizatorId: event.organizatorId,
+            maxBrojKarata
+          };
+    
+          try {
+            const response1 = await fetch("http://localhost:9000/karte", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+              body: JSON.stringify(karta),
+            });
+    
+            if (!response1.ok) {
+              alert("Failed to create ticket");
+            }
+          } catch (error1) {
+            alert("An error occurred while creating the ticket: " + error1);
+          }
+        }
     }
 
     return(
@@ -225,8 +310,45 @@ const UpdateEvent = ()=>{
             <Input name="Vrijemea"fieldType='outlined-required' labelText = 'Vrijeme dogadjaja (hh:mm)' onBlur={handleTimeChange}></Input>
             {errors.time && <p className="text-red-600">{errors.time}</p>}
             <Input name="Opisa"fieldType='textArea' size = '70.5rem'rows = {10} labelText = 'Unesite opis događaja*' defaultValue ={opiss} helperText='' maxHh='100rem'></Input>
-            <TicketForm numberOfTickets={numberOfTickets} setNumberOfTickets={setNumberOfTickets} add={"a"}></TicketForm>
-            <Event key={refreshKey} Picture={showIMG} Title={document.getElementsByName("Naslova")[0]?.value} Date={(document.getElementsByName("Datuma")[0]?.value||"") +" u "+ (document.getElementsByName("Vrijemea")[0]?.value||"")+"h"} Location={document.getElementsByName("Lokacijaa")[0]?.value} Lnk={false}></Event>
+            {minTickets && event &&( 
+            <div className="flex flex-col items-center justify-center m-5">
+              <Input name={"Numa"} id= "numTicketsa"fieldType="number" labelText="Unesite broj vrsta karata" defaultValue={minTickets} minValue={minTickets}
+                onChange={(e) => {
+                  handleNumberOfTicketsChange(e);
+                }}/>
+              <div className="bg-zinc-200 space-y-4 rounded-2xl p-10 mt-5">
+                {Array.from({ length: minTickets}).map((_, index) => (
+                  <div key={index} className="flex bg-white rounded-2xl p-5">
+                    <Input name={"Kartaa"+index}fieldType="outlined-disabled" defaultValue={event.karte[index].vrstaKarte} labelText="Naziv karte" />
+                    <Input name={"Cijenaa"+index}fieldType="outlined-disabled" labelText="Cijena karte u KM*" defaultValue={event.karte[index].cijena} />
+                    {/*<Input name={"BonusInfo"+add+index}fieldType="outlined-required" labelText="Dodatne informacije" />*/}
+                    <Input name={"NumTicketsa"+index}fieldType="number" labelText="Broj karata*" defaultValue={event.karte[index].maxBrojKarata} minValue={event.karte[index].brojProdatihKarata} maxValue={100000}/>
+                  </div>
+                ))}
+              </div>
+              { (numberOfTickets-minTickets>0)&&
+              <div className="bg-zinc-200 space-y-4 rounded-2xl p-10 mt-5">
+              {Array.from({ length: numberOfTickets-minTickets}).map((_, index) => (
+                <div key={index} className="flex bg-white rounded-2xl p-5">
+                  <Input name={"Kartaaa"+index}fieldType="outlined-required" labelText="Naziv karte" />
+                  <Input name={"Cijenaaa"+index}fieldType="outlined-required" labelText="Cijena karte u KM*" />
+                  {/*<Input name={"BonusInfo"+add+index}fieldType="outlined-required" labelText="Dodatne informacije" />*/}
+                  <Input name={"NumTicketsaa"+index}fieldType="number" labelText="Broj karata*"  minValue={1} maxValue={100000}/>
+                </div>
+              ))}
+              </div>
+              }
+              </div>
+            )}
+            <Event
+              key={refreshKey} 
+              Picture={showIMG} 
+              Title={document.getElementsByName("Naslova")[0]?.value ? document.getElementsByName("Naslova")[0]?.value : (event===null)?"":event.naziv} 
+              Date={(document.getElementsByName("Datuma")[0]?.value ? document.getElementsByName("Datuma")[0]?.value : (event===null)?"":event.datum.split('-').reverse().join('.') + '.') +" u "+ 
+                (document.getElementsByName("Vrijemea")[0]?.value ? document.getElementsByName("Vrijemea")[0]?.value : (event===null)?"":event.vrijeme.slice(0, 5) )+"h"} 
+              Location={document.getElementsByName("Lokacijaa")[0]?.value ? document.getElementsByName("Lokacijaa")[0]?.value : (event===null)?"":event.lokacija} 
+              Lnk={false}>
+            </Event>
             <div className="flex gap-10">
                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]"onClick={refreshEvent}>
                   Osvježi
@@ -260,11 +382,11 @@ const UpdateEvent = ()=>{
               <EventPreview
                 isVisible={isVisible}
                 closeDiv={closeDiv}
-                naslov={document.getElementsByName("Naslova")[0]?.value}
+                naslov={document.getElementsByName("Naslova")[0]?.value ? document.getElementsByName("Naslova")[0]?.value : (event===null)?"":event.naziv}
                 showIMG={showIMG}
-                lokacija={document.getElementsByName("Lokacijaa")[0]?.value}
-                datum={document.getElementsByName("Datuma")[0]?.value}
-                vrijeme={document.getElementsByName("Vrijemea")[0]?.value}
+                lokacija={document.getElementsByName("Lokacijaa")[0]?.value ? document.getElementsByName("Lokacijaa")[0]?.value : (event===null)?"":event.lokacija}
+                datum={(document.getElementsByName("Datuma")[0]?.value ? document.getElementsByName("Datuma")[0]?.value : (event===null)?"":event.datum.split('-').reverse().join('.') + '.')}
+                vrijeme={(document.getElementsByName("Vrijemea")[0]?.value ? document.getElementsByName("Vrijemea")[0]?.value : (event===null)?"":event.vrijeme.slice(0, 5) )}
                 opis={document.getElementsByName("Opisa")[0]?.value}
                 tickets={numberOfTickets}
               />
