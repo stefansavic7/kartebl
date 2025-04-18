@@ -17,7 +17,6 @@ const ShowEvent = ({id}) =>{
     fetchEvent();
   }, [id]);
 
-  // Return a loading state while event data is null
   if (!event) {
     return <div>Loading event...</div>;
   }
