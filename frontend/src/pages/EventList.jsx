@@ -26,7 +26,7 @@ export const EventList = () => {
         };
 
         const mappedEvents = response.data
-        .filter(event => event.odobren !== "odbijen")
+        .filter(event => (event.odobren !== "odbijen") && (event.odobren !== "azuriran odbijen"))
         .map(event => ({
           id: event.id,
           naziv: event.naziv,

@@ -46,13 +46,15 @@ const ShowEvent = ({id}) =>{
                     {Array.from({ length: event.karte.length }).map((_, index) => {
                     const karta = event.karte[index].vrstaKarte;
                     const cijenaInput = event.karte[index].cijena;
+                    
                     return (
-                        <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
+                    (event.karte[index].maxBrojKarata !== event.karte[index].brojProdatihKarata) &&
+                      <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
                         <span className="font-bold text-xl ">{karta}</span>
                         <div className="bg-white rounded-xl text-black m-2 p-2">
                             <div><b>Cijena:</b> {cijenaInput} KM</div>
                         </div>
-                        </div>
+                      </div>  
                     );
                     })}
                     </div>

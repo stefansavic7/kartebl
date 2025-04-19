@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Event from "./Event";
 import EventPreview from "./EventPreview";
-import Input from "./Input";
-import {jwtDecode} from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
 
 const OrganizatorEventHandle = ({ isVisible, setIsVisible , event}) =>{

@@ -1,6 +1,4 @@
 import React from "react";
-import Zdravko from "../assets/Zdravko.jpeg";
-import RibljaCorba from "../assets/RibljaCorba.jpg";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
