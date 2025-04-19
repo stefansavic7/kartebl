@@ -11,6 +11,15 @@ export const OrganizatorEvents = () => {
     const [token, setToken] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
+    const statusOrder = {
+        "azuriran odbijen":1,
+        "aktivan": 2,
+        "azuriran": 3,
+        "odbijen":4,
+        "zahtjev": 5,
+        "sakriven": 6
+      };
+
     useEffect(() => {
         const tokenString = localStorage.getItem("token");
         
@@ -66,6 +75,9 @@ export const OrganizatorEvents = () => {
                             }
                         })
                     );
+                    dogadjajiSaSlikama.sort((a, b) => {
+                        return statusOrder[a.odobren] - statusOrder[b.odobren];
+                      });
 
                     setDogadjaji(dogadjajiSaSlikama);
                 } catch (error) {

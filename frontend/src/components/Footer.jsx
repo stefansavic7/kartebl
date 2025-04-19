@@ -7,7 +7,7 @@ const Footer = () => {
     <div className="bg-[#282231] text-white z-49">
       {/* Kontejner za slike i sadržaj */}
       <div className="flex flex-wrap items-center justify-between container mx-auto pt-6 px-4 lg:px-12">
-        {/* Leva slika */}
+        {/* Lijeva slika */}
         <img
           className="h-[15%] w-[15%] mb-6 lg:mb-0"
           src={ticketImageLeft}

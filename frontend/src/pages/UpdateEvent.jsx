@@ -176,7 +176,7 @@ const UpdateEvent = ()=>{
           const data = await response1.json();
           const organizatorId =data.id;
           let odobren="";
-          if((event.odobren==="aktivan")||(event.odobren==="sakriven")) 
+          if((event.odobren==="aktivan")||(event.odobren==="sakriven")||(event.odobren==="azuriran odbijen")) 
             odobren = "azuriran";
           else
             odobren = "zahtjev";

@@ -70,12 +70,16 @@ const EventPreview = ({ isVisible,closeDiv,naslov,showIMG,lokacija,datum,vrijeme
                     const karta = event.karte[index].vrstaKarte;
                     const cijenaInput = event.karte[index].cijena;
                     const numTickets = event.karte[index].maxBrojKarata;
+                    const numSoldTickets = event.karte[index].brojProdatihKarata
                     return (
                         <div key={index} className=" flex flex-col mb-5 rounded-2xl p-2 justify-center items-center bg-[#282231] text-white">
                         <span className="font-bold text-xl ">{karta}</span>
                         <div className="bg-white rounded-xl text-black m-2 p-2">
                             <div><b>Cijena:</b> {cijenaInput} KM</div>
                             <div><b>Broj karata:</b> {numTickets}</div>
+                            {event.odobren!=="odbijen" && event.odobren!=="zahtjev"&&
+                            <div><b>Broj prodatih karata:</b> {numSoldTickets}</div>
+                            }
                         </div>
                         </div>
                     );

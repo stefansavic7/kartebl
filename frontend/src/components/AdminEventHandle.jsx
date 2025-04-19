@@ -44,6 +44,9 @@ const AdminEventHandle = ({ isVisible, setIsVisible , event}) =>{
             }
             const data = await response1.json();
             event.administratorId=data.id;
+
+            if(event.odobren==="azuriran" && num==="odbijen")
+                num="azuriran odbijen";
             
             
             const e = {
@@ -162,7 +165,7 @@ const AdminEventHandle = ({ isVisible, setIsVisible , event}) =>{
                                     Obriši
                                 </button>
                                 }
-                                {(event.odobren!=="zahtjev"&&event.odobren!=="sakriven")&&
+                                {(event.odobren!=="zahtjev"&&event.odobren!=="sakriven"&&event.odobren!=="azuriran")&&
                                 <button className="bg-blue-600 text-white rounded-full hover:bg-blue-700 transition w-[8.5rem] h-[3rem]" onClick={() => setIsUkloniVisable(true)}>
                                     Sakrij
                                 </button>

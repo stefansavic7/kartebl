@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Zdravko from "../assets/zdravko.jpeg";
 import OnlineProdaja from "../assets/OnlineProdaja.jpg";
 
 export const AboutUs = () => {
