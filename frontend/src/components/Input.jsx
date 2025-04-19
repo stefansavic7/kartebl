@@ -107,38 +107,42 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
                 sx={dynamicStyles}
             />
             );
-          case 'textArea':
-            return (
-              <TextField
-                id="outlined-textarea"
-                label={labelText}
-                defaultValue={defaultValue}
-                helperText={helperText}
-                multiline
-                rows={rows}
-                name={name}
-                sx={{
-                  ...dynamicStyles,
-                  '& .MuiInputBase-root': {
-                    overflow: 'hidden',
-                    alignItems: 'flex-start',
-                    
-                  },
-                  '& .MuiInputBase-input': {
-                    resize: 'vertical',
-                    overflow: 'auto',
-                    padding: '8px',
-                    lineHeight: '1.5',
-                    border: 'none',
-                  },
-                  '& textarea': {
-                    resize: 'vertical',
-                    border: 'none',
-                    maxHeight: maxHh,
-                  },
-                }}
-              />
-            );
+            case 'textArea':
+              return (
+                <TextField
+                  id="outlined-textarea"
+                  label={labelText}
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    if (onChange) onChange(e);
+                  }}
+                  helperText={helperText}
+                  multiline
+                  rows={rows}
+                  name={name}
+                  sx={{
+                    ...dynamicStyles,
+                    '& .MuiInputBase-root': {
+                      overflow: 'hidden',
+                      alignItems: 'flex-start',
+                    },
+                    '& .MuiInputBase-input': {
+                      resize: 'vertical',
+                      overflow: 'auto',
+                      padding: '8px',
+                      lineHeight: '1.5',
+                      border: 'none',
+                    },
+                    '& textarea': {
+                      resize: 'vertical',
+                      border: 'none',
+                      maxHeight: maxHh,
+                    },
+                  }}
+                />
+              );
+            
         case 'helperText':
             return (
             <TextField
@@ -156,7 +160,7 @@ export default function Input({ fieldType, size = '20rem', labelText = 'default'
 
   return (
     <Box
-      component="form"
+     
       sx={{ '& .MuiTextField-root': { m: 1 } }}
       noValidate
       autoComplete="off"

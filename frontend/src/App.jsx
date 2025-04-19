@@ -15,6 +15,7 @@ import UpdateEvent from "./pages/UpdateEvent";
 import { OrganizatorEvents } from "./pages/OrganizatorEvents";
 import { UserProvider } from "./utils/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { PregledPoruka } from "./pages/PregledPoruka";
 
 
 const AppContent = () => {
@@ -59,6 +60,7 @@ const AppContent = () => {
         <Route path="prijava" element={<Login />} />
         <Route path="registracija" element={<Registration />} />
         <Route path="updateEvent" element={<UpdateEvent/>} />
+        <Route path="pregledPoruka" element={<PregledPoruka/>} />
         
         {/* Protected routes for Organizator */}
         <Route 
