@@ -23,18 +23,23 @@ const NavBar = () => {
             <i className="fas fa-phone"></i>
             <span>Kontaktirajte nas</span>
           </Link>
-          <Link to="/karte" className="flex items-center space-x-2 hover:text-gray-800">
-            <i className="fas fa-ticket"></i>
-            <span>Karte</span>
-          </Link>
           <Link to="/info" className="flex items-center space-x-2 hover:text-gray-800">
             <i className="fas fa-info"></i>
             <span>O nama</span>
           </Link>
+          {user && 
           <Link to="/pregledPoruka" className="flex items-center space-x-2 hover:text-gray-800">
           <i className="fas fa-envelope"></i>
             <span>Pregledaj poruke</span>
           </Link>
+          }
+          {
+            user && user.role === "administrator" &&
+          <Link to="/eventList" className="flex items-center space-x-2 hover:text-gray-800">
+          <i className="fas fa-calendar"></i>
+            <span>Pregledaj događaje</span>
+          </Link>
+          }
         </div>
 
         

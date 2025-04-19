@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import Input from "./Input";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useUser } from '../utils/UserContext';
 
 const SendEmail = ({ emailPrimaoca }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [poruka, setPoruka] = useState("");
-
-  const openDiv = () => setIsVisible(true);
+  const { user } = useUser()
+  const openDiv = () => {
+    if(user) 
+      setIsVisible(true)
+    else 
+      alert("Da biste nas kontaktirali morate biti ulogovani.")
+  }
   const closeDiv = () => {
     setIsVisible(false);
     setPoruka("");
