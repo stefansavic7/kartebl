@@ -5,15 +5,27 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      const decodedToken = jwtDecode(token);
-      setUser({ email: decodedToken.sub, role: decodedToken.role });
+      try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        if (decodedToken.exp < currentTime) {
+          localStorage.removeItem("token");
+          setUser(null);
+        } else {
+          setUser({ email: decodedToken.sub, role: decodedToken.role });
+        }
+      } catch (err) {
+        localStorage.removeItem("token");
+        setUser(null);
+      }
     }
-    setLoading(false);
+    setIsLoading(false);
   }, []);
 
   const login = (token) => {
@@ -28,7 +40,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, isLoading }}>
       {children}
     </UserContext.Provider>
   );

@@ -11,11 +11,9 @@ import CreateEvent from "./pages/CreateEvent";
 import { EventList } from "./pages/EventList";
 import ShowEvent from "./components/ShowEvent";
 import { useCallback, useEffect, useState } from "react";
-import UpdateEvent from "./pages/UpdateEvent";
 import { OrganizatorEvents } from "./pages/OrganizatorEvents";
 import { UserProvider } from "./utils/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { PregledPoruka } from "./pages/PregledPoruka";
 
 
 const AppContent = () => {
@@ -54,13 +52,10 @@ const AppContent = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home updateRoutes={updateRoutes} />} />
         <Route path="kontakt" element={<Contact />} />
-        <Route path="karte" element={<Tickets />} />
         <Route path="info" element={<About />} />
         <Route path="profil" element={<Profile />} />
         <Route path="prijava" element={<Login />} />
         <Route path="registracija" element={<Registration />} />
-        <Route path="updateEvent" element={<UpdateEvent/>} />
-        <Route path="pregledPoruka" element={<PregledPoruka/>} />
         
         {/* Protected routes for Organizator */}
         <Route 
@@ -75,18 +70,25 @@ const AppContent = () => {
           path="organizatorEvents" 
           element={
             <ProtectedRoute requiredRole="organizator">
-              <OrganizatorEvents/>
+              <OrganizatorEvents />
             </ProtectedRoute>
           }
         />
         
-        <Route path="eventList" element={<EventList />} />
+        <Route path="eventList" element={
+          <ProtectedRoute requiredRole="administrator">
+          <EventList />
+        </ProtectedRoute>} />
 
         {approvedEvents.map((eventId) => (
           <Route
             key={eventId}
             path={`${eventId}`}
-            element={<ShowEvent id={eventId}/>}
+            element={
+            <ProtectedRoute requiredRole="administrator">
+                <ShowEvent id={eventId} numberOfTickets={0}/>
+            </ProtectedRoute>
+          }
           />
         ))}
 
