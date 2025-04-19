@@ -12,7 +12,7 @@ const Contact = () => {
         <FAQ question="Da li se sa jednom kartom može više puta ući na događaj?" answer = "Ne, nakon skeniranja karta postaje nevalidna."></FAQ>
       </div>
       <div className="flex justify-center p-10 gap-60 pb-20 ">
-        <SendEmail></SendEmail>
+        <SendEmail emailPrimaoca="admin1@mail.com"></SendEmail>
         <CallUs></CallUs>
       </div>
     </div>

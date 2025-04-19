@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const FAQ = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
