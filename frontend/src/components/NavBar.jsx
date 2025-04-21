@@ -19,10 +19,13 @@ const NavBar = () => {
             <i className="fa-solid fa-house"></i>
             <span>Početna</span>
           </Link>
+          {
+           (!user || user.role === "korisnik") &&
           <Link to="/kontakt" className="flex items-center space-x-2 hover:text-gray-800">
             <i className="fas fa-phone"></i>
             <span>Kontaktirajte nas</span>
           </Link>
+          }
           <Link to="/info" className="flex items-center space-x-2 hover:text-gray-800">
             <i className="fas fa-info"></i>
             <span>O nama</span>
@@ -31,6 +34,20 @@ const NavBar = () => {
           <Link to="/pregledPoruka" className="flex items-center space-x-2 hover:text-gray-800">
           <i className="fas fa-envelope"></i>
             <span>Pregledaj poruke</span>
+          </Link>
+          }
+          {
+            user && user.role === "organizator" &&
+          <Link to="/createEvent" className="flex items-center space-x-2 hover:text-gray-800">
+          <i className="fa-solid fa-calendar-plus"></i>
+            <span>Kreiraj događaj</span>
+          </Link>
+          }
+          {
+            user && user.role === "organizator" &&
+          <Link to="/organizatorEvents" className="flex items-center space-x-2 hover:text-gray-800">
+          <i className="fas fa-calendar"></i>
+            <span>Vaši događaji</span>
           </Link>
           }
           {
@@ -47,12 +64,14 @@ const NavBar = () => {
          
           {user ? (
             <>
-             
+              {
+                user.role === "korisnik" &&
               <Link to="/profil">
                 <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
                   <i className="fas fa-user"></i> Profil
                 </button>
               </Link>
+              }
 
               
               <button
