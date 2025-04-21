@@ -15,7 +15,8 @@ import { OrganizatorEvents } from "./pages/OrganizatorEvents";
 import { UserProvider } from "./utils/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { PregledPoruka } from "./pages/PregledPoruka";
-
+import updateEvent from "./pages/UpdateEvent"
+import UpdateEvent from "./pages/UpdateEvent";
 
 const AppContent = () => {
   const location = useLocation();
@@ -76,6 +77,14 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
+        <Route 
+          path="updateEvent" 
+          element={
+            <ProtectedRoute requiredRole="organizator">
+              <UpdateEvent />
+            </ProtectedRoute>
+          }
+        />
         
         <Route path="eventList" element={
           <ProtectedRoute requiredRole="administrator">
@@ -88,7 +97,6 @@ const AppContent = () => {
             path={`${eventId}`}
             element={
                 <ShowEvent id={eventId} numberOfTickets={0}/>
-
           }
           />
         ))}
