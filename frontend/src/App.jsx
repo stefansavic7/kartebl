@@ -87,9 +87,8 @@ const AppContent = () => {
             key={eventId}
             path={`${eventId}`}
             element={
-            <ProtectedRoute requiredRole="administrator">
                 <ShowEvent id={eventId} numberOfTickets={0}/>
-            </ProtectedRoute>
+
           }
           />
         ))}

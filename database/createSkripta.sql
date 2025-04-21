@@ -62,7 +62,7 @@ CREATE TABLE `dogadjaj` (
   `datum` date NOT NULL,
   `vrijeme` time NOT NULL,
   `lokacija` varchar(45) NOT NULL,
-  `opis` varchar(500) DEFAULT NULL,
+  `opis` varchar(4000) DEFAULT NULL,
   `administrator_id` int NOT NULL,
   `organizator_id` int NOT NULL,
   `odobren` varchar(30) DEFAULT NULL,
