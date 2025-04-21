@@ -6,10 +6,6 @@ import axios from "axios";
 
 export const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  
-  const openDiv = () => setIsVisible(true);
-  const closeDiv = () => setIsVisible(false);
 
   const [korisnik, setKorisnik] = useState(null);
 
@@ -107,26 +103,6 @@ export const MyProfile = () => {
       
       
       */}
-      
-        <button className="col-span-2 flex text-red-500 mt-40 justify-end " onClick={openDiv}>
-          Obriši nalog
-        </button>
-        {isVisible && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-4 rounded shadow-lg w-80 flex flex-col items-center justify-center">
-              <div className="flex justify-between items-center gap-16 mb-10 ml-2 mr-2">
-                <h2 className="text-lg font-semibold">Potvrdi brisanje naloga</h2>
-                <button onClick={closeDiv} className="text-gray-500 hover:text-gray-800 text-2xl">
-                  &times;
-                </button>
-              </div>
-                <span >Da li ste sigurni da</span><span> želite da obrišete nalog?</span>
-              <button className="text-red-500 mt-10 ">
-                Obriši nalog
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
